@@ -22,7 +22,7 @@ html, body {
      Eyebrow:  섹션 서브레이블 · 카테고리 · 가격
      Body:     본문
   ─────────────────────────────────────────────────────────────── */
-  --t-display:  clamp(3rem, 5vw, 4.2rem);       /* 모든 섹션 주요 헤드라인   */
+  --t-display:  clamp(2rem, 5vw, 4.2rem);       /* 모든 섹션 주요 헤드라인   */
   --t-title:    clamp(1.8rem, 3vw, 2.6rem);     /* 카드 제목, 서브 헤드라인  */
   --t-eyebrow:  clamp(1.2rem, 1.5vw, 1.5rem);  /* 섹션 서브레이블           */
   --t-body:     1rem;                            /* 본문                     */
@@ -346,7 +346,7 @@ main { padding-top: 120px; }
 }
 
 .hero-headline {
-  font-size: clamp(2rem, 3.5vw, 3.2rem);
+  font-size: var(--t-display);
   font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1.15;
@@ -393,9 +393,6 @@ main { padding-top: 120px; }
   .hero-bottom { padding: 2.5rem var(--page-x) 0; gap: 1.25rem; }
 
   .frame-title { font-size: clamp(1.6rem, 7vw, 2.4rem); }
-
-  /* 히어로 헤드라인 - 모바일에서 로컬과 웹 일치 */
-  .hero-headline { font-size: 2rem; }
 
   .tag {
     font-size: 1.1rem;
