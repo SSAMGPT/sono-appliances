@@ -394,6 +394,9 @@ main { padding-top: 120px; }
 
   .frame-title { font-size: clamp(1.6rem, 7vw, 2.4rem); }
 
+  /* 히어로 헤드라인 - 모바일에서 로컬과 웹 일치 */
+  .hero-headline { font-size: 2rem; }
+
   .tag {
     font-size: 1.1rem;
     padding: 0.55rem 1.3rem;
