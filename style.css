@@ -351,6 +351,8 @@ main { padding-top: 120px; }
   letter-spacing: -0.04em;
   line-height: 1.15;
   color: #0a0a0a;
+  word-break: keep-all;   /* 한국어 단어 단위 줄바꿈 */
+  overflow-wrap: break-word;
 }
 
 /* 태블릿+ : br 숨겨서 한 줄로 표시 */
