@@ -346,12 +346,12 @@ main { padding-top: 120px; }
 }
 
 .hero-headline {
-  font-size: clamp(3rem, 5vw, 4.2rem);
+  font-size: clamp(2rem, 3.5vw, 3.2rem);
   font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1.15;
   color: #0a0a0a;
-  word-break: keep-all;   /* 한국어 단어 단위 줄바꿈 */
+  word-break: keep-all;
   overflow-wrap: break-word;
 }
 
