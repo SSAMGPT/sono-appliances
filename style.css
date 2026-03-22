@@ -3,7 +3,7 @@
 
 html, body {
   min-height: 100dvh;
-  font-family: 'Google Sans Flex', 'Pretendard', -apple-system, sans-serif;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
   background: #fff;
   color: #0a0a0a;
   line-height: 1;
