@@ -457,14 +457,8 @@ main { padding-top: 120px; }
 
 /* ─── 캐러셀 ─────────────────────────────────────────────────────────── */
 .bs-carousel {
-  /* overflow:hidden은 슬라이더에 필요하나 badge가 우측에서 잘림.
-     padding-right으로 클리핑 영역을 badge 반지름(34px)만큼 확장하고
-     margin-right으로 외부 여백을 보상해 전체 폭은 동일하게 유지. */
   overflow: hidden;
   width: 100%;
-  padding-right: 44px;
-  margin-right: -44px;
-  box-sizing: content-box;
 }
 
 .bs-track {
