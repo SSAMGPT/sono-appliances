@@ -31,9 +31,27 @@
     </div>
   </header>
 
+  <!-- ── 내비게이션 오버레이 메뉴 ─────────────────────────────── -->
+  <div class="nav-overlay" id="navOverlay" aria-hidden="true">
+    <div class="nav-overlay__backdrop" id="navBackdrop"></div>
+    <nav class="nav-drawer" id="navDrawer" aria-label="사이트 메뉴">
+      <button class="nav-drawer__close" id="navClose" aria-label="메뉴 닫기">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <line x1="2" y1="2" x2="20" y2="20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="20" y1="2" x2="2" y2="20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <ul class="nav-drawer__list">
+        <li><a class="nav-drawer__link" href="#hero">홈</a></li>
+        <li><a class="nav-drawer__link" href="#section-bs">베스트셀러</a></li>
+        <li><a class="nav-drawer__link" href="#consultSection">소노 스마트케어</a></li>
+      </ul>
+    </nav>
+  </div>
+
   <!-- ── 히어로 ─────────────────────────────────────────────────── -->
   <main>
-    <section class="hero">
+    <section class="hero" id="hero">
 
       <!-- ① 상단: 카드형 메인 프레임 -->
       <div class="hero-top">
@@ -130,7 +148,7 @@
     </section>
   </main>
 
-  <section class="section-bs">
+  <section class="section-bs" id="section-bs">
     <div class="section-bs__header">
       <h2 class="section-title">
         <span class="tr-wrap"><span class="tr-inner">Best Seller</span></span>
@@ -1034,6 +1052,46 @@
         if (!m || !t) return;
         m.addEventListener('input', () => t.value = m.value);
         t.addEventListener('input', () => m.value = t.value);
+      });
+    })();
+  </script>
+
+
+  <script>
+    /* ── 햄버거 메뉴 열기/닫기 ── */
+    (function () {
+      const overlay  = document.getElementById('navOverlay');
+      const menuBtn  = document.querySelector('.menu-btn');
+      const closeBtn = document.getElementById('navClose');
+      const backdrop = document.getElementById('navBackdrop');
+      const links    = document.querySelectorAll('.nav-drawer__link');
+
+      function openMenu() {
+        overlay.classList.add('is-open');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMenu() {
+        overlay.classList.remove('is-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      if (menuBtn)  menuBtn.addEventListener('click', openMenu);
+      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+      if (backdrop) backdrop.addEventListener('click', closeMenu);
+
+      /* 링크 클릭 시 메뉴 닫고 부드럽게 스크롤 */
+      links.forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          closeMenu();
+          setTimeout(() => {
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 200); // 드로어 닫힌 후 스크롤
+        });
       });
     })();
   </script>
