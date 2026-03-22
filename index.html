@@ -300,7 +300,7 @@
     <div class="wizard-body">
 
       <!-- ① 상품 선택 -->
-      <div class="wizard-step">
+      <div class="wizard-step" id="wizardStepProduct">
         <div class="wstep-row">
           <!-- 왼쪽: 번호+타이틀+배지 -->
           <div class="wstep-left">
@@ -997,10 +997,9 @@
     (function () {
       const tabbar  = document.getElementById('consultTabbar');
       const tabbarSel = document.getElementById('tabbarSel');
-      const section = document.getElementById('consultSection');
+      const productStep = document.getElementById('wizardStepProduct');
       const footer  = document.querySelector('.site-footer-main');
-
-      if (!tabbar || !section || !footer) return;
+      if (!tabbar || !productStep || !footer) return;
 
       let sectionIn = false, footerIn = false;
 
@@ -1016,13 +1015,13 @@
 
       const obs = new IntersectionObserver(entries => {
         entries.forEach(e => {
-          if (e.target === section)  sectionIn = e.isIntersecting;
-          if (e.target === footer)   footerIn  = e.isIntersecting;
+          if (e.target === productStep) sectionIn = e.isIntersecting;
+          if (e.target === footer)      footerIn  = e.isIntersecting;
         });
         updateVisibility();
       }, { threshold: 0.05 });
 
-      obs.observe(section);
+      obs.observe(productStep);
       obs.observe(footer);
 
       /* 선택 상태 반영 (sel 객체의 변화를 감지하기 위해 refreshSubmit 확장) */
