@@ -686,7 +686,7 @@ main { padding-top: 120px; }
 }
 
 @media (max-width: 768px) {
-  .consult-title { font-size: 2.86rem; }
+  .consult-title { font-size: 2.38rem; }
 }
 
 .wizard-body { margin-top: 4vw; }
@@ -1077,6 +1077,16 @@ main { padding-top: 120px; }
   font-size: 1.575rem; /* 1.05 × 1.5 */
   font-weight: 700;
   color: #a0ec06;
+}
+
+/* 모바일: 상품 카드 내부 텍스트 1.2배 축소 (타이틀·배지 제외) */
+@media (max-width: 767px) {
+  .plan-info-card__label { font-size: 0.63rem; }
+  .plan-info-card__desc  { font-size: 0.83rem; }
+  .plan-card-row         { padding: 0.8rem 0; }
+  .plan-card-row__key    { font-size: 1.025rem; }
+  .plan-card-row__val    { font-size: 1.125rem; }
+  .plan-card-row--total .plan-card-row__val { font-size: 1.31rem; }
 }
 
 .plan-title-row {
