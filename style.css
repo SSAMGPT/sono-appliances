@@ -22,7 +22,7 @@ html, body {
      Eyebrow:  섹션 서브레이블 · 카테고리 · 가격
      Body:     본문
   ─────────────────────────────────────────────────────────────── */
-  --t-display:  clamp(2rem, 5vw, 4.2rem);       /* 모든 섹션 주요 헤드라인   */
+  --t-display:  clamp(1.43rem, 3.57vw, 3rem);   /* 모든 섹션 주요 헤드라인   */
   --t-title:    clamp(1.8rem, 3vw, 2.6rem);     /* 카드 제목, 서브 헤드라인  */
   --t-eyebrow:  clamp(1.2rem, 1.5vw, 1.5rem);  /* 섹션 서브레이블           */
   --t-body:     1rem;                            /* 본문                     */
