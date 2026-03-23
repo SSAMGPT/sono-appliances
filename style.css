@@ -1623,10 +1623,7 @@ main { padding-top: 120px; }
   overflow: hidden;
   cursor: grab;
   position: relative;
-  /* overflow:hidden이 outline도 클리핑함
-     → 위아래 6px padding으로 outline 표시 영역 확보 */
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding: 6px 4px;    /* 상하: shadow, 좌우: shadow 클리핑 방지 */
 }
 .app-row-outer:active { cursor: grabbing; }
 
@@ -1686,6 +1683,8 @@ main { padding-top: 120px; }
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(3, auto);
     gap: 0.6rem;
+    padding: 5px;          /* shadow 클리핑 방지 */
+    box-sizing: border-box;
   }
 
   .app-slider__page .app-card {
