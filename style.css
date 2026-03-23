@@ -1438,7 +1438,10 @@ main { padding-top: 120px; }
 @media (max-width: 767px)  { .app-track { grid-auto-columns: calc((100% - 1rem) / 2); } }
 
 .app-card:hover  { transform: translateY(-4px); }
-.app-card.active { background: rgba(164, 228, 63, 0.10); }
+.app-card.active {
+  box-shadow: 0 0 0 2.5px #A4E43F, 0 4px 14px rgba(164,228,63,0.22);
+  transform: scale(1.02);
+}
 
 .app-card__thumb {
   aspect-ratio: 3 / 4;
@@ -1650,9 +1653,9 @@ main { padding-top: 120px; }
   .app-row-track .app-card { flex: 0 0 calc(50vw - 0.5rem); }     /* 2개 */
 }
 
-/* ✅ outline: overflow:hidden에 잘리지 않아 배지 겹침 없음 */
 .app-row-track .app-card.active {
-  background: rgba(164, 228, 63, 0.10);
+  box-shadow: 0 0 0 2.5px #A4E43F, 0 4px 14px rgba(164,228,63,0.22);
+  transform: scale(1.02);
   outline: none;
 }
 .app-row-track .app-card:hover { transform: translateY(-3px); }
@@ -1689,9 +1692,10 @@ main { padding-top: 120px; }
     transition: outline-color 0.15s;
     cursor: pointer;
   }
-  .app-slider__page .app-card:hover   { transform: none; }
-  .app-slider__page .app-card.active  {
-    background: rgba(164, 228, 63, 0.10);
+  .app-slider__page .app-card:hover  { transform: none; }
+  .app-slider__page .app-card.active {
+    box-shadow: 0 0 0 2.5px #A4E43F, 0 4px 14px rgba(164,228,63,0.22);
+    transform: scale(1.02);
   }
 
   .app-slider__dots {

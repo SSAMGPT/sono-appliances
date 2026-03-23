@@ -1155,12 +1155,13 @@
       const tabbarSel = document.getElementById('tabbarSel');
       const productStep = document.getElementById('wizardStepProduct');
       const footer  = document.querySelector('.site-footer-main');
+      const formStep = document.querySelector('.wizard-form-step');
       if (!tabbar || !productStep || !footer) return;
 
-      let sectionIn = false, footerIn = false;
+      let sectionIn = false, formIn = false, footerIn = false;
 
       function updateVisibility() {
-        if (sectionIn && !footerIn) {
+        if ((sectionIn || formIn) && !footerIn) {
           tabbar.classList.add('is-visible');
           tabbar.setAttribute('aria-hidden', 'false');
         } else {
@@ -1172,12 +1173,14 @@
       const obs = new IntersectionObserver(entries => {
         entries.forEach(e => {
           if (e.target === productStep) sectionIn = e.isIntersecting;
+          if (e.target === formStep)    formIn    = e.isIntersecting;
           if (e.target === footer)      footerIn  = e.isIntersecting;
         });
         updateVisibility();
       }, { threshold: 0.05 });
 
       obs.observe(productStep);
+      if (formStep) obs.observe(formStep);
       obs.observe(footer);
 
       /* 선택 상태 반영 (sel 객체의 변화를 감지하기 위해 refreshSubmit 확장) */
