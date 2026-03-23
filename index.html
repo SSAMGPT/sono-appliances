@@ -28,7 +28,7 @@
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
     rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <link rel="stylesheet" href="style.css?v=94f2ea7" />
+  <link rel="stylesheet" href="style.css?v=mwl5rgy" />
   <style>
     /* 모바일 헤더 강제 적용 — CSS 캐시 무관 */
     @media (max-width: 768px) {
@@ -338,13 +338,13 @@
         <div class="plan-info-card">
             <div class="plan-info-card__inner">
               <div class="plan-title-row">
-                <h4 class="plan-info-card__title" id="planCardTitle">330X4</h4>
+                <h4 class="plan-info-card__title" id="planCardTitle">스마트케어 330X4</h4>
                 <span class="plan-card-best" id="planCardBest">Best</span>
               </div>
               <div class="plan-card-rows">
                 <div class="plan-card-row">
                   <span class="plan-card-row__key">월 정액</span>
-                  <span class="plan-card-row__val" id="planCardMonthly">33,000원</span>
+                  <span class="plan-card-row__val" id="planCardMonthly">132,000원</span>
                 </div>
                 <div class="plan-card-row">
                   <span class="plan-card-row__key">납입 방식</span>
@@ -391,30 +391,43 @@
         </div>
         <!-- 모바일 슬라이더 (2열 페이지) -->
         <div id="appSlider" class="app-slider">
+          <div class="app-slider__dots app-slider__dots--top" id="appSliderDotsTop"></div>
           <div class="app-slider__track" id="appSliderTrack"></div>
           <div class="app-slider__dots" id="appSliderDots"></div>
         </div>
-      </div>
-
-      </div>
-
-      <!-- 상담 신청 폼 (sticky 범위 밖) -->
-      <div class="wizard-step wizard-form-step">
-        <div class="wstep-head wstep-head--form">
-          <h3 class="wstep-title">상담 신청</h3>
-          <div class="sel-summary" id="selSummary">상품 · 브랜드 · 가전을 선택해주세요</div>
+        <!-- 플랜 세부 정보 (가전 이미지 아래) -->
+        <div class="plan-detail-strip" id="planDetailStrip">
+          <div class="plan-detail__line plan-detail__line--product" id="pdLine0"></div>
+          <div class="plan-detail__line" id="pdLine1"></div>
+          <div class="plan-detail__line plan-detail__line--highlight" id="pdLine2"></div>
         </div>
-        <form class="consult-form" id="consultForm">
-          <div class="form-fields">
-            <input class="form-input" id="cf_name" type="text" placeholder="이름" required />
-            <input class="form-input" id="cf_phone" type="tel" placeholder="연락처" required />
-          </div>
-          <button class="form-submit" id="formSubmitBtn" type="submit" disabled>
-            상담 신청하기
-          </button>
-        </form>
-        <p class="form-done" id="formDone" hidden>✓ 상담 신청이 완료됐습니다. 곧 연락드리겠습니다.</p>
       </div>
+
+      </div>
+
+      <!-- 선택 상품 플로팅 바 (하단에서 슬라이드업) -->
+      <div class="sel-bar" id="selBar" aria-hidden="true">
+        <div class="sel-bar__inner">
+          <div class="sel-bar__row">
+            <div class="sel-bar__thumb" id="selBarThumb"></div>
+            <div class="sel-bar__text">
+              <div class="sel-bar__meta" id="selBarMeta"></div>
+              <div class="sel-bar__name" id="selBarName"></div>
+            </div>
+            <button class="sel-bar__cancel" id="selBarCancel" type="button">취소</button>
+          </div>
+          <div class="sel-bar__fields">
+            <input class="sel-bar__input" id="sb_name"  type="text" placeholder="이름" />
+            <input class="sel-bar__input" id="sb_phone" type="tel"  placeholder="연락처" />
+          </div>
+          <button class="sel-bar__cta" id="selBarCta" type="button">
+            선택한 상품으로 신청하기 →
+          </button>
+        </div>
+      </div>
+
+      <!-- 완료 메시지 -->
+      <p class="form-done" id="formDone" hidden>✓ 상담 신청이 완료됐습니다. 곧 연락드리겠습니다.</p>
 
     </div><!-- /.wizard-body -->
   </section>
@@ -426,7 +439,8 @@
       const brandWrap = document.querySelector('.brand-sticky-wrap');
       const catWrap   = document.querySelector('.cat-sticky-wrap');
       const formStep  = document.querySelector('.wizard-form-step');
-      if (!wrap || !formStep) return;
+      const footer    = document.querySelector('footer') || document.querySelector('.site-footer');
+      if (!wrap) return;
 
       function mkHolder(cls, after) {
         const d = document.createElement('div');
@@ -438,35 +452,41 @@
       const brandPholder = brandWrap ? mkHolder('brand-sticky-placeholder', brandWrap) : null;
       const catPholder   = catWrap   ? mkHolder('cat-sticky-placeholder',   catWrap)   : null;
 
-      const HEADER_H = document.querySelector('.site-header')?.offsetHeight || 60;
+      const getHeaderH = () =>
+        document.querySelector('.site-header')?.getBoundingClientRect().height || 60;
       let planFixed = false, brandFixed = false, catFixed = false;
 
       const planH  = () => wrap.offsetHeight;
       const brandH = () => brandWrap ? brandWrap.offsetHeight : 0;
       const catH   = () => catWrap   ? catWrap.offsetHeight   : 0;
 
-      const planTop  = () => HEADER_H;
-      const brandTop = () => HEADER_H + (planFixed  ? planH()  : 0);
-      const catTop   = () => HEADER_H + (planFixed  ? planH()  : 0)
-                                      + (brandFixed ? brandH() : 0);
+      const planTop  = () => getHeaderH();
+      const brandTop = () => getHeaderH() + (planFixed  ? planH()  : 0);
+      const catTop   = () => getHeaderH() + (planFixed  ? planH()  : 0)
+                                          + (brandFixed ? brandH() : 0);
 
       function update() {
-        const formRect = formStep.getBoundingClientRect();
-        /* formEnds: 모든 탭바 높이 합산 + 10px 버퍼로 안정적 임계값 */
-        const totalStickyH = HEADER_H + planH() + brandH() + catH();
-        const formEnds = formRect.top <= totalStickyH + 10;
+        const totalStickyH = getHeaderH() + planH() + brandH() + catH();
+        /* formStep이 없으면 항상 sticky 유지, 있으면 진입 시 해제 */
+        const formEnds = formStep
+          ? formStep.getBoundingClientRect().top <= totalStickyH + 10
+          : (footer ? footer.getBoundingClientRect().top <= totalStickyH + 10 : false);
 
         /* ── 플랜 ── */
+        const pt = planTop();
         if (!planFixed) {
-          if (wrap.getBoundingClientRect().top <= planTop() && !formEnds) {
+          if (wrap.getBoundingClientRect().top <= pt && !formEnds) {
             planFixed = true;
-            wrap.classList.add('is-fixed');              /* 먼저 is-fixed 적용 */
-            pholder.style.height = planH() + 'px';       /* 그 후 높이 측정 */
+            wrap.style.top = pt + 'px';
+            wrap.classList.add('is-fixed');
+            pholder.style.height = planH() + 'px';
             pholder.classList.add('active');
           }
         } else {
-          if (pholder.getBoundingClientRect().top > planTop() || formEnds) {
+          wrap.style.top = pt + 'px';   /* 뷰포트 변경 시에도 항상 갱신 */
+          if (pholder.getBoundingClientRect().top > pt || formEnds) {
             planFixed = false;
+            wrap.style.top = '';
             wrap.classList.remove('is-fixed');
             pholder.classList.remove('active');
           }
@@ -621,7 +641,7 @@
 
   </script>
 
-  <!-- ── 상담 위저드 JS ─────────────────────────────────────────── -->
+  <!-- ── 상담 위저드 JS ────────────────────────────────────── -->
   <script>
     (function () {
       const SUPA_URL = 'https://rbliwhiibewihqlpmihd.supabase.co';
@@ -645,36 +665,52 @@
         '스타일러': '👔', '에어컨': '❄️', '공기청정기': '💨', '청소기': '🌀', '노트북': '💻', '정수기': '💧'
       };
 
-      const sel = { plan: null, brand: null, appliance: null };
-      window.__wizSel = sel; // 탭바 동기화용 전역 노출
+      const sel = { plan: null, brand: null, appliance: null, img: null, appBrand: null, model: null };
+      window.__wizSel = sel;
 
-      const submitBtn = document.getElementById('formSubmitBtn');
-      const selSummary = document.getElementById('selSummary');
+      /* 필터 상태 (sel과 분리: 화면 표시 필터용) */
+      let fPlan = null, fBrand = '전체', fCat = '전체';
 
-      /* ── 제출 버튼 상태 갱신 ─── */
+      const selBar    = document.getElementById('selBar');
+      const selThumb  = document.getElementById('selBarThumb');
+      const selMeta   = document.getElementById('selBarMeta');
+      const selName   = document.getElementById('selBarName');
+      const selCancel = document.getElementById('selBarCancel');
+      const selCta    = document.getElementById('selBarCta');
+
+      /* ── 플로팅 바 갱신 ─── */
       function refreshSubmit() {
         const ready = sel.plan && sel.brand && sel.appliance;
-        submitBtn.disabled = !ready;
+        if (!selBar) return;
         if (ready) {
-          selSummary.innerHTML =
-            '<span class="sel-chip">' + sel.plan + '</span>' +
-            '<span class="sel-chip">' + sel.brand + '</span>' +
-            '<span class="sel-chip">' + sel.appliance + '</span>';
+          /* 썸네일 */
+          if (sel.img) {
+            selThumb.style.backgroundImage = "url('" + sel.img + "')";
+            selThumb.style.backgroundSize = 'contain';
+            selThumb.style.backgroundPosition = 'center';
+            selThumb.style.backgroundRepeat = 'no-repeat';
+          } else {
+            selThumb.style.backgroundImage = '';
+          }
+          /* 메타: 플랜 · 브랜드 · 모델 */
+          const modelPart = sel.model ? ' · ' + sel.model : '';
+          selMeta.textContent = sel.plan + ' · ' + (sel.appBrand || sel.brand) + modelPart;
+          /* 제품명 */
+          selName.textContent = sel.appliance;
+          selBar.classList.add('is-open');
+          selBar.setAttribute('aria-hidden', 'false');
         } else {
-          const missing = [];
-          if (!sel.plan) missing.push('상품');
-          if (!sel.brand) missing.push('브랜드');
-          if (!sel.appliance) missing.push('가전');
-          selSummary.textContent = missing.join(' · ') + ' 을(를) 선택해주세요';
+          selBar.classList.remove('is-open');
+          selBar.setAttribute('aria-hidden', 'true');
         }
       }
 
       /* ── 플랜 데이터 ─── */
       const PLAN_DATA = {
-        '330X2': { title: '스마트케어 330X2', monthly: '33,000원', payment: '렌탈 1~60회 / 상조 61~200회', total: '6,600,000원',  best: false },
-        '330X3': { title: '스마트케어 330X3', monthly: '33,000원', payment: '렌탈 1~60회 / 상조 61~200회', total: '9,900,000원',  best: false },
-        '330X4': { title: '스마트케어 330X4', monthly: '33,000원', payment: '렌탈 1~60회 / 상조 61~200회', total: '13,200,000원', best: true  },
-        '330X6': { title: '스마트케어 330X6', monthly: '33,000원', payment: '렌탈 1~60회 / 상조 61~200회', total: '19,800,000원', best: false },
+        '330X2': { title: '스마트케어 330X2', monthly: '66,000원',  payment: '렌탈 1~60회 / 상조 61~200회', total: '6,600,000원',  switchCount: '2회 또는', refund: '만기 익월 660만 원 전액 100% 환급',   best: false },
+        '330X3': { title: '스마트케어 330X3', monthly: '99,000원',  payment: '렌탈 1~60회 / 상조 61~200회', total: '9,900,000원',  switchCount: '3회 또는', refund: '만기 익월 990만 원 전액 100% 환급',   best: false },
+        '330X4': { title: '스마트케어 330X4', monthly: '132,000원', payment: '렌탈 1~60회 / 상조 61~200회', total: '13,200,000원', switchCount: '4회 또는', refund: '만기 익월 1,320만 원 전액 100% 환급', best: true  },
+        '330X6': { title: '스마트케어 330X6', monthly: '198,000원', payment: '렌탈 1~60회 / 상조 61~200회', total: '19,800,000원', switchCount: '6회 또는', refund: '만기 익월 1,980만 원 전액 100% 환급', best: false },
       };
 
       function updatePlanCard(value) {
@@ -686,6 +722,11 @@
         document.getElementById('planCardTotal').textContent   = d.total;
         const bestEl = document.getElementById('planCardBest');
         bestEl.style.display = d.best ? 'inline-flex' : 'none';
+        /* 가전 이미지 아래 디테일 스트립 업데이트 */
+        const l1 = document.getElementById('pdLine1');
+        const l2 = document.getElementById('pdLine2');
+        if (l1) l1.textContent = d.payment + ' | 월 정액 ' + d.monthly + ' | 서비스 전환 ' + d.switchCount;
+        if (l2) l2.textContent = d.refund;
       }
 
       /* ── 배지 렌더 (공통) ─── */
@@ -727,6 +768,8 @@
           container.querySelectorAll('.sel-badge').forEach(b => b.classList.remove('active'));
           allBtn.classList.add('active');
           sel.brand = '전체';
+          fBrand = '전체';
+          applyFilters();
           refreshSubmit();
         });
         container.appendChild(allBtn);
@@ -741,6 +784,8 @@
             container.querySelectorAll('.sel-badge').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             sel.brand = item.value;
+            fBrand = item.value;
+            applyFilters();
             refreshSubmit();
           });
           container.appendChild(btn);
@@ -752,26 +797,48 @@
       const rowScrollers = []; // 행 스크롤러 참조 {stop, start, reset}
 
       function makeCard(p) {
-        const grad    = CAT_GRAD[p.category] || 'linear-gradient(145deg,#333,#666)';
-        const emoji   = CAT_EMOJI[p.category] || '🏠';
-        const isLandscape = ['TV', '노트북'].includes(p.category);
-        const bgStyle = p.img_url
-          ? "background-image:url('" + p.img_url + "');" +
-            "background-size:" + (isLandscape ? "contain" : "cover") + ";" +
-            "background-position:" + (isLandscape ? "center" : "center top") + ";" +
-            "background-repeat:no-repeat;" +
-            (isLandscape ? "background-color:#f8f8f8;" : "")
-          : 'background:' + grad;
+        const grad  = CAT_GRAD[p.category] || 'linear-gradient(145deg,#eee,#ccc)';
+        const emoji = CAT_EMOJI[p.category] || '🏠';
+        const frameStyle = p.img_url
+          ? "background-image:url('" + p.img_url + "');background-size:contain;background-position:center;background-repeat:no-repeat;"
+          : 'background:' + grad + ';';
         const card = document.createElement('article');
         card.className = 'app-card';
-        card.dataset.cat = p.category || '';
+        card.dataset.cat      = p.category || '';
+        card.dataset.imgUrl   = p.img_url  || '';
+        card.dataset.appBrand = p.brand    || p.category || '';
+        card.dataset.name     = p.name     || '';
+        card.dataset.model    = p.full_name || '';
+        /* 플랜 정보: 제품의 plan 필드 우선, 없으면 현재 선택 플랜 */
+        const planKey = p.plan || fPlan;
+        const planD   = PLAN_DATA[planKey] || {};
+        const priceStr   = planD.monthly || '';
+        const benefitStr = planD.refund || '';
+
         card.innerHTML =
-          '<div class="app-card__thumb" style="' + bgStyle + '">' +
+          '<div class="app-card__frame" style="' + frameStyle + '">' +
             (!p.img_url ? '<span class="app-card__emoji">' + emoji + '</span>' : '') +
           '</div>' +
           '<div class="app-card__body">' +
-            '<p class="app-card__cat">' + (p.category || '') + '</p>' +
-            '<h4 class="app-card__name">' + p.name + '</h4>' +
+            '<span class="app-card__brand">' + (p.brand || p.category || '') + '</span>' +
+            (p.full_name ? '<h4 class="app-card__name">' + p.full_name + '</h4>' : '') +
+            '<p class="app-card__product-name">' + p.name + '</p>' +
+            (priceStr || benefitStr
+              ? '<dl class="app-card__plan-info">' +
+                  (priceStr
+                    ? '<div class="app-card__plan-row">' +
+                        '<dt>예상 요금</dt>' +
+                        '<dd>' + priceStr + '</dd>' +
+                      '</div>'
+                    : '') +
+                  (benefitStr
+                    ? '<div class="app-card__plan-row app-card__plan-row--benefit">' +
+                        '<dt>예상 혜택</dt>' +
+                        '<dd>' + benefitStr + '</dd>' +
+                      '</div>'
+                    : '') +
+                '</dl>'
+              : '') +
           '</div>';
         return card;
       }
@@ -855,7 +922,13 @@
           if (!card || dragDist > 5) return;
           document.querySelectorAll('.app-card').forEach(c => c.classList.remove('active'));
           card.classList.add('active');
-          sel.appliance = card.querySelector('.app-card__name').textContent;
+          sel.appliance = card.dataset.name || card.querySelector('.app-card__name')?.textContent || '';
+          sel.img       = card.dataset.imgUrl  || '';
+          sel.appBrand  = card.dataset.appBrand || '';
+          sel.model     = card.dataset.model    || '';
+          /* plan-detail-strip 상품명 업데이트 */
+          const pdl0 = document.getElementById('pdLine0');
+          if (pdl0) pdl0.textContent = (sel.appBrand ? sel.appBrand + ' ' : '') + sel.appliance;
           refreshSubmit();
         });
 
@@ -912,13 +985,15 @@
       let sliderTimer = null;
 
       function renderSlider(products) {
-        const track  = document.getElementById('appSliderTrack');
-        const dotsEl = document.getElementById('appSliderDots');
+        const track    = document.getElementById('appSliderTrack');
+        const dotsEl   = document.getElementById('appSliderDots');
+        const dotsTopEl = document.getElementById('appSliderDotsTop');
         if (!track) return;
 
         if (sliderTimer) { clearInterval(sliderTimer); sliderTimer = null; }
         track.innerHTML = '';
         if (dotsEl) dotsEl.innerHTML = '';
+        if (dotsTopEl) dotsTopEl.innerHTML = '';
 
         if (!products.length) {
           track.innerHTML = '<p class="loading-text" style="padding:2rem 0">해당 카테고리의 제품이 없습니다.</p>';
@@ -939,7 +1014,12 @@
             card.addEventListener('click', () => {
               track.querySelectorAll('.app-card').forEach(c => c.classList.remove('active'));
               card.classList.add('active');
-              sel.appliance = card.querySelector('.app-card__name').textContent;
+              sel.appliance = card.dataset.name     || card.querySelector('.app-card__name')?.textContent || '';
+              const pdl0m = document.getElementById('pdLine0');
+              if (pdl0m) pdl0m.textContent = (card.dataset.appBrand ? card.dataset.appBrand + ' ' : '') + sel.appliance;
+              sel.img       = card.dataset.imgUrl   || '';
+              sel.appBrand  = card.dataset.appBrand || '';
+              sel.model     = card.dataset.model    || '';
               refreshSubmit();
             });
             pageEl.appendChild(card);
@@ -947,56 +1027,93 @@
           track.appendChild(pageEl);
         }
 
-        /* 도트 인디케이터 */
-        if (dotsEl && pages > 1) {
-          for (let i = 0; i < pages; i++) {
-            const dot = document.createElement('button');
-            dot.className = 'app-slider__dot' + (i === 0 ? ' active' : '');
-            dot.addEventListener('click', () => goPage(i));
-            dotsEl.appendChild(dot);
-            dots.push(dot);
-          }
+        /* 도트 인디케이터 (상단 + 하단) */
+        const dotsTop = [];
+        if (pages > 1) {
+          [dotsEl, dotsTopEl].forEach((container, ci) => {
+            if (!container) return;
+            for (let i = 0; i < pages; i++) {
+              const dot = document.createElement('button');
+              dot.className = 'app-slider__dot' + (i === 0 ? ' active' : '');
+              dot.addEventListener('click', () => goPage(i));
+              container.appendChild(dot);
+              if (ci === 0) dots.push(dot);
+              else dotsTop.push(dot);
+            }
+          });
         }
 
         function goPage(pg) {
-          curPage = Math.max(0, Math.min(pages - 1, pg));  /* 양 끝 클램프 */
+          curPage = ((pg % pages) + pages) % pages;  /* 무한 루프 */
           track.style.transform = 'translateX(-' + (curPage * 100) + '%)';
           dots.forEach((d, i) => d.classList.toggle('active', i === curPage));
+          dotsTop.forEach((d, i) => d.classList.toggle('active', i === curPage));
         }
 
-        /* 10초 자동: 마지막 페이지 도달 시 정지 */
+        /* 10초 자동: 마지막 페이지 → 첫 페이지로 무한 반복 */
         function scheduleAuto() {
           if (sliderTimer) clearInterval(sliderTimer);
-          if (curPage >= pages - 1) return;
-          sliderTimer = setInterval(() => {
-            if (curPage < pages - 1) { goPage(curPage + 1); }
-            else { clearInterval(sliderTimer); sliderTimer = null; }
-          }, 10000);
+          if (pages <= 1) return;
+          sliderTimer = setInterval(() => goPage(curPage + 1), 10000);
         }
         scheduleAuto();
 
         /* 터치 드래그 */
         let txStart = 0, txPage = 0, txActive = false;
+        const sliderW = () => track.parentElement.offsetWidth || window.innerWidth;
         track.addEventListener('touchstart', e => {
           txStart = e.touches[0].clientX; txPage = curPage; txActive = true;
           if (sliderTimer) { clearInterval(sliderTimer); sliderTimer = null; }
+          track.style.transition = 'none';
+        }, { passive: true });
+        track.addEventListener('touchmove', e => {
+          if (!txActive) return;
+          const dx = e.touches[0].clientX - txStart;
+          const base = -(txPage * 100);
+          const pct  = (dx / sliderW()) * 100;
+          track.style.transform = 'translateX(' + (base + pct) + '%)';
         }, { passive: true });
         track.addEventListener('touchend', e => {
           if (!txActive) return; txActive = false;
+          track.style.transition = '';
           const dx = e.changedTouches[0].clientX - txStart;
           if (Math.abs(dx) > 40) goPage(txPage + (dx < 0 ? 1 : -1));
+          else goPage(txPage);
           scheduleAuto();
         });
       }
 
-      /* ── 필터 ─── */
-      function filterByCategory(catVal) {
-        sel.appliance = catVal === '전체' ? null : catVal;
-        const filtered = catVal === '전체'
-          ? allProducts
-          : allProducts.filter(p => p.category === catVal);
+      /* ── 통합 필터 ── */
+      function applyFilters() {
+        let filtered = allProducts;
+        if (fPlan) {
+          filtered = filtered.filter(p =>
+            !p.plan || p.plan === fPlan ||
+            p.plan.split(',').map(s => s.trim()).includes(fPlan)
+          );
+        }
+        if (fBrand && fBrand !== '전체') {
+          filtered = filtered.filter(p => p.brand === fBrand);
+        }
+        if (fCat && fCat !== '전체') {
+          filtered = filtered.filter(p => p.category === fCat);
+        }
         renderTwoRows(filtered);
-        renderSlider(filtered);  /* 모바일 슬라이더 */
+        renderSlider(filtered);
+      }
+
+      function filterByCategory(catVal) {
+        fCat = catVal;
+        /* 선택 중인 제품이 이 카테고리에 없으면 선택 해제 */
+        if (catVal !== '전체') {
+          document.querySelectorAll('.app-card.active').forEach(c => {
+            if (c.dataset.cat !== catVal) {
+              c.classList.remove('active');
+              sel.appliance = null; sel.img = null; sel.appBrand = null;
+            }
+          });
+        }
+        applyFilters();
         refreshSubmit();
       }
 
@@ -1037,7 +1154,7 @@
 
         const { data, error } = await db
           .from('products')
-          .select('id, name, category, brand, plan, img_url')
+          .select('id, name, full_name, category, brand, plan, img_url')
           .order('sort_order');
 
         if (error) {
@@ -1065,37 +1182,98 @@
         if (brandRes.error) console.error('[wizard] brand options:', brandRes.error);
         if (catRes.error)   console.error('[wizard] cat options:', catRes.error);
 
-        renderBadges('planBadges', planRes.data || [], 'plan', '330X4', updatePlanCard); // 330X4 기본 선택
+        renderBadges('planBadges', planRes.data || [], 'plan', '330X4', (val) => {
+          fPlan = val;
+          updatePlanCard(val);
+          applyFilters();
+        }); // 330X4 기본 선택
         renderBrandBadges(brandRes.data || []);                           // '전체' 포함, 기본 선택
         renderCatBadges(catRes.data || []);
         await loadAppliances();
       }
 
-      /* ── 폼 제출 ─── */
-      document.getElementById('consultForm').addEventListener('submit', async function (e) {
-        e.preventDefault();
-        if (!sel.plan || !sel.brand || !sel.appliance) return;
-        submitBtn.disabled = true;
-        submitBtn.textContent = '신청 중...';
-        const { error } = await db.from('consultations').insert({
-          plan: sel.plan,
-          brand: sel.brand,
-          appliance: sel.appliance,
-          name: document.getElementById('cf_name').value,
-          phone: document.getElementById('cf_phone').value,
+      /* ── sel-bar CTA 클릭 → 상담 신청 ─── */
+      if (selCta) {
+        selCta.addEventListener('click', async () => {
+          if (!sel.plan || !sel.brand || !sel.appliance) return;
+          selCta.disabled = true;
+          selCta.textContent = '신청 중...';
+          const { error } = await db.from('consultations').insert({
+            plan:      sel.plan,
+            brand:     sel.brand,
+            appliance: sel.appliance,
+            name:      document.getElementById('sb_name')?.value  || '',
+            phone:     document.getElementById('sb_phone')?.value || '',
+          });
+          if (error) {
+            console.error('[wizard] consult insert:', error);
+            alert('오류가 발생했습니다. 다시 시도해주세요.');
+            selCta.disabled = false;
+            selCta.textContent = '선택한 상품으로 신청하기 →';
+          } else {
+            selBar.classList.remove('is-open');
+            document.getElementById('formDone').hidden = false;
+          }
         });
-        if (error) {
-          console.error('[wizard] consult insert:', error);
-          alert('오류가 발생했습니다. 다시 시도해주세요.');
-          submitBtn.disabled = false;
-          submitBtn.textContent = '상담 신청하기';
-        } else {
-          document.getElementById('consultForm').hidden = true;
-          document.getElementById('formDone').hidden = false;
-        }
-      });
+      }
+
+      /* ── sel-bar 취소 ─── */
+      if (selCancel) {
+        selCancel.addEventListener('click', () => {
+          sel.appliance = null; sel.img = null; sel.appBrand = null;
+          document.querySelectorAll('.app-card').forEach(c => c.classList.remove('active'));
+          refreshSubmit();
+        });
+      }
 
       init();
+    })();
+  </script>
+
+  <!-- ── 상담 신청 섹션 (푸터 위 고정) ──────────────────────────── -->
+  <section class="static-form-section" id="staticFormSection">
+    <div class="static-form-inner">
+      <h2 class="static-form__title">무료 상담 신청</h2>
+      <p class="static-form__sub">전문 상담사가 빠르게 연락드립니다</p>
+      <form class="static-form" id="staticConsultForm">
+        <div class="static-form__fields">
+          <input class="static-form__input" id="sf_name"  type="text" placeholder="이름" required />
+          <input class="static-form__input" id="sf_phone" type="tel"  placeholder="연락처" required />
+        </div>
+        <button class="static-form__cta" type="submit">상담 신청하기 →</button>
+      </form>
+      <p class="static-form__done" id="staticFormDone" hidden>✓ 신청이 완료됐습니다. 곧 연락드리겠습니다.</p>
+    </div>
+  </section>
+
+  <script>
+    /* ── 고정 상담 신청 폼 제출 ── */
+    (function () {
+      const form = document.getElementById('staticConsultForm');
+      const done = document.getElementById('staticFormDone');
+      if (!form) return;
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const cta = form.querySelector('.static-form__cta');
+        cta.disabled = true;
+        cta.textContent = '신청 중...';
+        const SUPA_URL = 'https://rbliwhiibewihqlpmihd.supabase.co';
+        const SUPA_KEY = 'sb_publishable_n0rEJFTn6Qu12Ui_qDO8bw_sSVJbTR-';
+        const db = supabase.createClient(SUPA_URL, SUPA_KEY);
+        const { error } = await db.from('consultations').insert({
+          name:  document.getElementById('sf_name').value,
+          phone: document.getElementById('sf_phone').value,
+        });
+        if (error) {
+          console.error('[static form]', error);
+          alert('오류가 발생했습니다. 다시 시도해주세요.');
+          cta.disabled = false;
+          cta.textContent = '상담 신청하기 →';
+        } else {
+          form.hidden = true;
+          done.hidden = false;
+        }
+      });
     })();
   </script>
 
@@ -1140,109 +1318,6 @@
 
     </div>
   </footer>
-
-  <!-- ── 하단 고정 상담 탭바 ──────────────────────────────────── -->
-  <div class="consult-tabbar" id="consultTabbar" aria-hidden="true">
-    <div class="consult-tabbar__inner">
-      <!-- 선택 요약 -->
-      <div class="consult-tabbar__sel" id="tabbarSel">
-        <span class="tabbar-chip tabbar-chip--empty">플랜 선택</span>
-        <span class="tabbar-sep">&middot;</span>
-        <span class="tabbar-chip tabbar-chip--empty">브랜드 선택</span>
-        <span class="tabbar-sep">&middot;</span>
-        <span class="tabbar-chip tabbar-chip--empty">가전 선택</span>
-      </div>
-      <!-- 입력 + 버튼 -->
-      <div class="consult-tabbar__form">
-        <input class="tabbar-input" id="tabbarName" type="text" placeholder="이름" autocomplete="name">
-        <input class="tabbar-input" id="tabbarPhone" type="tel" placeholder="연락처" autocomplete="tel">
-        <button class="consult-tabbar__btn" id="tabbarBtn" type="button">선택한 상품으로 상담 신청하기</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    /* ── 하단 탭바 표시/숨김 + 선택 요약 동기화 ── */
-    (function () {
-      const tabbar  = document.getElementById('consultTabbar');
-      const tabbarSel = document.getElementById('tabbarSel');
-      const productStep = document.getElementById('wizardStepProduct');
-      const footer  = document.querySelector('.site-footer-main');
-      const formStep = document.querySelector('.wizard-form-step');
-      if (!tabbar || !productStep || !footer) return;
-
-      let sectionIn = false, formIn = false, footerIn = false;
-
-      function updateVisibility() {
-        if ((sectionIn || formIn) && !footerIn) {
-          tabbar.classList.add('is-visible');
-          tabbar.setAttribute('aria-hidden', 'false');
-        } else {
-          tabbar.classList.remove('is-visible');
-          tabbar.setAttribute('aria-hidden', 'true');
-        }
-      }
-
-      const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.target === productStep) sectionIn = e.isIntersecting;
-          if (e.target === formStep)    formIn    = e.isIntersecting;
-          if (e.target === footer)      footerIn  = e.isIntersecting;
-        });
-        updateVisibility();
-      }, { threshold: 0.05 });
-
-      obs.observe(productStep);
-      if (formStep) obs.observe(formStep);
-      obs.observe(footer);
-
-      /* 선택 상태 반영 (sel 객체의 변화를 감지하기 위해 refreshSubmit 확장) */
-      const origRefresh = window.__origRefreshTabbar;
-      function syncTabbar() {
-        const wizardSel = window.__wizSel;
-        if (!wizardSel) return;
-        const labels = [
-          wizardSel.plan      || '플랜 선택',
-          wizardSel.brand     || '브랜드 선택',
-          wizardSel.appliance || '가전 선택',
-        ];
-        tabbarSel.innerHTML = labels.map((l, i) =>
-          '<span class="tabbar-chip' + (l.endsWith('선택') ? ' tabbar-chip--empty' : '') + '">' + l + '</span>' +
-          (i < 2 ? '<span class="tabbar-sep">&middot;</span>' : '')
-        ).join('');
-      }
-
-      /* 1초마다 sel 상태를 poll해서 탭바 동기화 */
-      setInterval(syncTabbar, 500);
-
-      /* ── 탭바 제출 버튼 ── */
-      document.getElementById('tabbarBtn').addEventListener('click', () => {
-        const name  = document.getElementById('tabbarName').value.trim();
-        const phone = document.getElementById('tabbarPhone').value.trim();
-        if (!name)  { document.getElementById('tabbarName').focus();  return; }
-        if (!phone) { document.getElementById('tabbarPhone').focus(); return; }
-
-        // 메인 폼 필드에 복사
-        const cfName  = document.getElementById('cf_name');
-        const cfPhone = document.getElementById('cf_phone');
-        if (cfName)  cfName.value  = name;
-        if (cfPhone) cfPhone.value = phone;
-
-        // 메인 폼 제출
-        const form = document.getElementById('consultForm');
-        if (form) form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-      });
-
-      /* 메인 폼 ↔ 탭바 입력 양방향 동기화 */
-      [['cf_name','tabbarName'],['cf_phone','tabbarPhone']].forEach(([mId, tId]) => {
-        const m = document.getElementById(mId), t = document.getElementById(tId);
-        if (!m || !t) return;
-        m.addEventListener('input', () => t.value = m.value);
-        t.addEventListener('input', () => m.value = t.value);
-      });
-    })();
-  </script>
-
 
   <script>
     /* ── 햄버거 메뉴 열기/닫기 ── */
