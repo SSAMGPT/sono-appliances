@@ -59,7 +59,6 @@
       </button>
       <ul class="nav-drawer__list">
         <li><a class="nav-drawer__link" href="#hero">홈</a></li>
-        <li><a class="nav-drawer__link" href="#section-bs">베스트셀러</a></li>
         <li><a class="nav-drawer__link" href="#consultSection">소노 스마트케어</a></li>
       </ul>
     </nav>
@@ -85,12 +84,12 @@
             <span class="btn-home__label">SONO</span>
           </button>
 
-          <!-- 우하단 서클 배지 (슬라이드 카운터) -->
+          <!-- 우하단 서클 배지 -->
           <button class="hero-card-circle hero-card-circle--br btn-next" id="btnNext" aria-label="다음 슬라이드">
             <span class="btn-next__label">
               <span id="slideNum">01</span>
               <span class="slide-sep">/</span>
-              <span>04</span>
+              <span>01</span>
             </span>
             <span class="btn-next__arrow">
               <svg width="28" height="22" viewBox="0 0 30 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -105,47 +104,64 @@
             <div class="slides-track" id="slidesTrack">
 
               <div class="frame-slide" data-slide="0"
-                style="background:linear-gradient(145deg,#0d2b3e 0%,#0a5f6e 45%,#14998b 100%)">
-                <div class="frame-slide-content">
-                  <p class="frame-label">Home Appliances Rental</p>
-                  <h2 class="frame-title">스마트한 삶을<br>만드는 가전</h2>
-                </div>
-              </div>
+                style="background:#FF5838">
+                <div class="slide-hero-layout">
+                  <!-- 좌측 콘텐츠 -->
+                  <div class="slide-hero-left">
+                    <div class="slide-hero-svg">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 99.9 110.27" aria-hidden="true">
+                        <path fill="#a0ec06" d="M91.71,60.34l-9.01-5.19,9.01-5.19c7.84-4.52,10.51-14.53,5.99-22.36-4.52-7.84-14.53-10.51-22.36-5.99l-9.01,5.19v-10.42c0-9.04-7.34-16.38-16.38-16.38s-16.38,7.34-16.38,16.38v10.42l-9.01-5.19c-7.84-4.52-17.84-1.85-22.36,5.99-4.52,7.84-1.85,17.84,5.99,22.36l9.01,5.19-9.01,5.19c-7.84,4.52-10.51,14.53-5.99,22.36,4.52,7.84,14.53,10.51,22.36,5.99l9.01-5.19v10.39c0,9.04,7.34,16.38,16.38,16.38s16.38-7.34,16.38-16.38v-10.42l9.01,5.19c7.84,4.52,17.84,1.85,22.36-5.99,4.52-7.81,1.85-17.82-5.99-22.33Z"/>
+                      </svg>
+                    </div>
+                    <div class="slide-hero-text">
+                      <p class="slide-hero-sub">가입 그 순간부터, 돌려받는 그날까지</p>
+                      <h2 class="slide-hero-title">스마트케어 330<br>이렇게 사용하세요!</h2>
+                      <div class="hero-info-card">
+                        <div class="hero-info-steps">
+                          <span>① 가전+멤버십</span>
+                          <span class="hero-step-sep">→</span>
+                          <span>② 쓰면서 준비</span>
+                          <span class="hero-step-sep">→</span>
+                          <span>③ 전환 가능</span>
+                          <span class="hero-step-sep">→</span>
+                          <span>④ 환급</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-              <div class="frame-slide" data-slide="1"
-                style="background:linear-gradient(145deg,#001a8c 0%,#0039E3 100%)">
-                <div class="frame-slide-content">
-                  <p class="frame-label">Smart Care</p>
-                  <h2 class="frame-title">전문가 무료<br>상담 신청</h2>
-                </div>
-              </div>
-
-              <div class="frame-slide" data-slide="2"
-                style="background:linear-gradient(145deg,#c93b1a 0%,#FF6242 100%)">
-                <div class="frame-slide-content">
-                  <p class="frame-label">Best Seller</p>
-                  <h2 class="frame-title">합리적인 가격<br>가전 렌탈</h2>
-                </div>
-              </div>
-
-              <div class="frame-slide" data-slide="3"
-                style="background:linear-gradient(145deg,#0f1f28 0%,#1a3a52 100%)">
-                <div class="frame-slide-content">
-                  <p class="frame-label">Eco Care</p>
-                  <h2 class="frame-title">지속 가능한<br>에너지 절약</h2>
+                  <!-- 우측 2×2 벤토 카드 -->
+                  <div class="slide-hero-right">
+                    <div class="bento-card bento-card--light" style="background:#FFD9FE">
+                      <span class="bento-step">STEP 1</span>
+                      <h3 class="bento-title">가입하는 순간,<br>바로 시작</h3>
+                      <p class="bento-desc">최신 가전 + 소노 멤버십<br>최대 585만원 상당 가전 지원</p>
+                      <img class="bento-img" src="img/Frame 180 (1).png" alt="">
+                    </div>
+                    <div class="bento-card bento-card--dark" style="background:#3167ED">
+                      <span class="bento-step">STEP 2</span>
+                      <h3 class="bento-title">쓰면서<br>미래도 준비</h3>
+                      <p class="bento-desc">라이프케어 서비스 제공<br>구좌당 330만원 상당</p>
+                      <img class="bento-img" src="img/Frame 180 (2).png" alt="">
+                    </div>
+                    <div class="bento-card bento-card--dark" style="background:#3167ED">
+                      <span class="bento-step">STEP 3</span>
+                      <h3 class="bento-title">원하는 대로<br>바꿔 쓰세요</h3>
+                      <p class="bento-desc">장례 대신 8가지 전환<br>여행·크루즈·골프·웨딩 등</p>
+                      <img class="bento-img" src="img/Frame 180 (3).png" alt="">
+                    </div>
+                    <div class="bento-card bento-card--light" style="background:#FFD9FE">
+                      <span class="bento-step">STEP 4</span>
+                      <h3 class="bento-title">미사용 구좌,<br>전액 환급</h3>
+                      <p class="bento-desc">만기 익월 해지 시 납부금<br><strong>전액 100% 환급</strong></p>
+                      <img class="bento-img" src="img/Frame 180 (4).png" alt="">
+                    </div>
+                  </div>
                 </div>
               </div>
 
             </div><!-- /.slides-track -->
           </div><!-- /.hero-frame -->
-
-          <!-- 도트 (모바일 전용) -->
-          <div class="hero-dots" role="tablist">
-            <button class="dot active" data-idx="0"></button>
-            <button class="dot" data-idx="1"></button>
-            <button class="dot" data-idx="2"></button>
-            <button class="dot" data-idx="3"></button>
-          </div>
 
         </div>
       </div>
@@ -164,6 +180,7 @@
     </section>
   </main>
 
+  <!-- ── Best Seller 섹션 (비활성화) ──────────────────────────────
   <section class="section-bs" id="section-bs">
     <div class="section-bs__header">
       <h2 class="section-title">
@@ -273,6 +290,7 @@
       </div>
     </div>
   </section>
+  ────────────────────────────────────────────────────────────── -->
 
 
   <!-- ── 상담 섹션 ───────────────────────────────────────────────── -->
@@ -301,17 +319,15 @@
 
       <!-- ① 상품 선택 -->
       <div class="wizard-step" id="wizardStepProduct">
-        <div class="wstep-row">
-          <!-- 왼쪽: 번호+타이틀+배지 -->
-          <div class="wstep-left">
-            <div class="wstep-head">
-              <span class="wstep-num">1</span>
-              <h3 class="wstep-title">상품 선택</h3>
-            </div>
-            <div class="wstep-badges" id="planBadges"></div>
-          </div>
-          <!-- 오른쪽: 가로 긴 정보 카드 -->
-          <div class="plan-info-card">
+        <div class="wstep-head">
+          <span class="wstep-num">1</span>
+          <h3 class="wstep-title">상품 선택</h3>
+        </div>
+        <!-- 플랜 탭바 (sticky 처리) -->
+        <div class="plan-sticky-wrap">
+          <div id="planBadges"></div>
+        </div>
+        <div class="plan-info-card">
             <div class="plan-info-card__inner">
               <div class="plan-title-row">
                 <h4 class="plan-info-card__title" id="planCardTitle">330X4</h4>
@@ -336,14 +352,15 @@
         </div>
       </div>
 
-
       <!-- ② 브랜드 선택 -->
       <div class="wizard-step">
         <div class="wstep-head">
           <span class="wstep-num">2</span>
           <h3 class="wstep-title">브랜드 선택</h3>
         </div>
-        <div class="wstep-badges" id="brandBadges"></div>
+        <div class="brand-sticky-wrap">
+          <div id="brandBadges"></div>
+        </div>
       </div>
 
       <!-- ③ 가전 종류 -->
@@ -352,7 +369,9 @@
           <span class="wstep-num">3</span>
           <h3 class="wstep-title">가전 종류</h3>
         </div>
-        <div class="wstep-badges cat-filter-badges" id="catBadges"></div>
+        <div class="cat-sticky-wrap">
+          <div id="catBadges"></div>
+        </div>
         <!-- 독립 2행 캐러셀 -->
         <div class="app-dual-rows" id="appDualRows">
           <div class="app-row-outer" id="appRow1">
@@ -364,7 +383,9 @@
         </div>
       </div>
 
-      <!-- 상담 신청 폼 -->
+      </div>
+
+      <!-- 상담 신청 폼 (sticky 범위 밖) -->
       <div class="wizard-step wizard-form-step">
         <div class="wstep-head wstep-head--form">
           <h3 class="wstep-title">상담 신청</h3>
@@ -384,6 +405,112 @@
 
     </div><!-- /.wizard-body -->
   </section>
+
+  <!-- ── 플랜/브랜드/카테고리 Scroll-Fixed JS ─────────────────────── -->
+  <script>
+    (function () {
+      const wrap      = document.querySelector('.plan-sticky-wrap');
+      const brandWrap = document.querySelector('.brand-sticky-wrap');
+      const catWrap   = document.querySelector('.cat-sticky-wrap');
+      const formStep  = document.querySelector('.wizard-form-step');
+      if (!wrap || !formStep) return;
+
+      function mkHolder(cls, after) {
+        const d = document.createElement('div');
+        d.className = cls;
+        after.parentNode.insertBefore(d, after.nextSibling);
+        return d;
+      }
+      const pholder      = mkHolder('plan-sticky-placeholder', wrap);
+      const brandPholder = brandWrap ? mkHolder('brand-sticky-placeholder', brandWrap) : null;
+      const catPholder   = catWrap   ? mkHolder('cat-sticky-placeholder',   catWrap)   : null;
+
+      const HEADER_H = 120;
+      let planFixed = false, brandFixed = false, catFixed = false;
+
+      const planH  = () => wrap.offsetHeight;
+      const brandH = () => brandWrap ? brandWrap.offsetHeight : 0;
+      const catH   = () => catWrap   ? catWrap.offsetHeight   : 0;
+
+      const planTop  = () => HEADER_H;
+      const brandTop = () => HEADER_H + (planFixed  ? planH()  : 0);
+      const catTop   = () => HEADER_H + (planFixed  ? planH()  : 0)
+                                      + (brandFixed ? brandH() : 0);
+
+      function update() {
+        const formRect = formStep.getBoundingClientRect();
+        const formEnds = formRect.top <= HEADER_H + planH();
+
+        /* ── 플랜 ── */
+        if (!planFixed) {
+          if (wrap.getBoundingClientRect().top <= planTop() && !formEnds) {
+            planFixed = true;
+            pholder.style.height = planH() + 'px';
+            pholder.classList.add('active');
+            wrap.classList.add('is-fixed');
+          }
+        } else {
+          if (pholder.getBoundingClientRect().top > planTop() || formEnds) {
+            planFixed = false;
+            pholder.classList.remove('active');
+            wrap.classList.remove('is-fixed');
+          }
+        }
+
+        /* ── 브랜드 ── */
+        if (brandWrap && brandPholder) {
+          const bt = brandTop();
+          if (!brandFixed) {
+            if (brandWrap.getBoundingClientRect().top <= bt && !formEnds) {
+              brandFixed = true;
+              brandWrap.style.top = bt + 'px';
+              brandPholder.style.height = brandH() + 'px';
+              brandPholder.classList.add('active');
+              brandWrap.classList.add('is-fixed', 'plan-attached');
+              wrap.classList.add('brand-attached');
+            }
+          } else {
+            brandWrap.style.top = bt + 'px';
+            if (brandPholder.getBoundingClientRect().top > bt || formEnds) {
+              brandFixed = false;
+              brandWrap.style.top = '';
+              brandPholder.classList.remove('active');
+              brandWrap.classList.remove('is-fixed', 'plan-attached');
+              wrap.classList.remove('brand-attached');
+            }
+          }
+        }
+
+        /* ── 가전 종류 ── */
+        if (catWrap && catPholder) {
+          const ct = catTop();
+          if (!catFixed) {
+            if (catWrap.getBoundingClientRect().top <= ct && !formEnds) {
+              catFixed = true;
+              catWrap.style.top = ct + 'px';
+              catPholder.style.height = catH() + 'px';
+              catPholder.classList.add('active');
+              catWrap.classList.add('is-fixed', 'plan-attached');
+              if (brandWrap) brandWrap.classList.add('brand-attached');
+            }
+          } else {
+            catWrap.style.top = ct + 'px';
+            if (catPholder.getBoundingClientRect().top > ct || formEnds) {
+              catFixed = false;
+              catWrap.style.top = '';
+              catPholder.classList.remove('active');
+              catWrap.classList.remove('is-fixed', 'plan-attached');
+              if (brandWrap) brandWrap.classList.remove('brand-attached');
+            }
+          }
+        }
+      }
+
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    })();
+  </script>
 
 
   <!-- ── 슬라이더 JS ───────────────────────────────────────────── -->
@@ -423,76 +550,24 @@
       busy = false;
     });
 
-    function startAuto() {
-      clearInterval(timer);
-      timer = setInterval(() => goTo(current + 1), 7000);
-    }
+      // 자동 슬라이드 비활성화 (슬라이드 1개)
+    function startAuto() { /* disabled */ }
 
-    dots.forEach((d, i) => d.addEventListener('click', () => { goTo(i); startAuto(); }));
-    document.getElementById('btnNext').addEventListener('click', () => { goTo(current + 1); startAuto(); });
-    startAuto();
+    dots.forEach((d, i) => d.addEventListener('click', () => { goTo(i); }));
+    document.getElementById('btnNext')?.addEventListener('click', () => { goTo(current + 1); });
+    // startAuto() 제거 — 슬라이드 고정
     updateIconColor(0); // 초기 슬라이드 색상 즉시 적용
   </script>
 
-  <!-- ── Best Seller 캐러셀 JS ─────────────────────────────────── -->
+  <!-- ── Best Seller 캐러셀 JS (비활성화) ──────────────────────────
   <script>
     (function () {
       const bsTrack = document.getElementById('bsTrack');
       if (!bsTrack) return;
-
-      const BS_TOTAL = 5;
-      let bsIdx = BS_TOTAL;
-      let bsBusy = false, bsTimer;
-
-      const origCards = Array.from(bsTrack.children);
-      origCards.forEach(c => bsTrack.prepend(c.cloneNode(true)));
-      origCards.forEach(c => bsTrack.appendChild(c.cloneNode(true)));
-
-      function cardW() {
-        const card = bsTrack.querySelector('.bs-card');
-        const gap = parseFloat(getComputedStyle(bsTrack).gap) || 0;
-        return card ? card.offsetWidth + gap : 0;
-      }
-
-      function bsMoveTo(idx, instant) {
-        bsTrack.style.transition = instant ? 'none' : 'transform .5s cubic-bezier(.4,0,.2,1)';
-        bsTrack.style.transform = `translateX(${-idx * cardW()}px)`;
-        bsIdx = idx;
-      }
-
-      bsTrack.addEventListener('transitionend', () => {
-        if (bsIdx <= 0) { bsMoveTo(BS_TOTAL, true); }
-        else if (bsIdx >= BS_TOTAL * 2) { bsMoveTo(BS_TOTAL, true); }
-        bsBusy = false;
-      });
-
-      function bsNext() {
-        if (bsBusy) return;
-        bsBusy = true;
-        bsMoveTo(bsIdx + 1, false);
-      }
-
-      function bsPrev() {
-        if (bsBusy) return;
-        bsBusy = true;
-        bsMoveTo(bsIdx - 1, false);
-      }
-
-      function bsStartAuto() {
-        clearInterval(bsTimer);
-        bsTimer = setInterval(bsNext, 4000);
-      }
-
-      requestAnimationFrame(() => bsMoveTo(BS_TOTAL, true));
-
-      document.getElementById('bsPrev').addEventListener('click', () => { bsPrev(); bsStartAuto(); });
-      document.getElementById('bsNext').addEventListener('click', () => { bsNext(); bsStartAuto(); });
-
-      window.addEventListener('resize', () => bsMoveTo(bsIdx, true));
-
-      bsStartAuto();
+      // ... (캐러셀 JS 생략)
     })();
-  </script>
+  <\/script>
+  ────────────────────────────────────────────────────────────── -->
 
   <!-- ── GSAP + ScrollTrigger ─────────────────────────────────── -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
@@ -500,15 +575,6 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
-    const showHeader = gsap.from('.site-header', {
-      yPercent: -100, paused: true, duration: 0.3, ease: 'power2.inOut'
-    }).progress(1);
-    ScrollTrigger.create({
-      start: 'top top', end: 'max',
-      onUpdate: (self) => {
-        self.direction === -1 ? showHeader.play() : showHeader.reverse();
-      }
-    });
 
     gsap.from('.hero-headline .tr-inner', {
       yPercent: 105, duration: 0.9, ease: 'expo.out', delay: 0.3
