@@ -1657,6 +1657,70 @@ main { padding-top: 120px; }
 }
 .app-row-track .app-card:hover { transform: translateY(-3px); }
 
+/* ─── 모바일: 2행 캐러셀 숨기고 슬라이더 표시 ──────────────────── */
+#appSlider { display: none; }
+
+@media (max-width: 767px) {
+  #appDualRows { display: none !important; }
+  #appSlider   { display: block; overflow: hidden;
+                 margin: 0 calc(-1 * var(--page-x)); }
+
+  .app-slider__track {
+    display: flex;
+    gap: 0;
+    transition: transform 0.42s cubic-bezier(0.25, 0, 0.25, 1);
+    will-change: transform;
+  }
+
+  .app-slider__track .app-card {
+    flex: 0 0 50%;
+    padding: 0 0.3rem;
+    box-sizing: border-box;
+    /* hover 효과 비활성 — 터치 환경 */
+    transition: outline-color 0.15s;
+  }
+  .app-slider__track .app-card:hover { transform: none; }
+  .app-slider__track .app-card.active {
+    outline: 2.5px solid #0a0a0a;
+    outline-offset: 2px;
+  }
+
+  .app-slider__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.9rem 0 0.2rem;
+  }
+  .app-slider__dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(10,10,10,0.15);
+    border: none; cursor: pointer; padding: 0;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .app-slider__dot.active {
+    background: #0a0a0a;
+    transform: scale(1.4);
+  }
+}
+
+/* ─── 카드 이미지 위 카테고리 레이블 ───────────────────────────── */
+.app-card__thumb { position: relative; }
+
+.app-card__cat-label {
+  position: absolute;
+  top: 0.5rem; left: 0.5rem;
+  background: rgba(10,10,10,0.58);
+  color: #fff;
+  font-size: 0.72rem; font-weight: 700;
+  padding: 0.18rem 0.52rem;
+  border-radius: 999px;
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+  letter-spacing: 0.02em;
+}
+
+
 /* ─── 헤드라인 SVG 아이콘 ─────────────────────────────────────── */
 .headline-icon {
   display: inline-block;

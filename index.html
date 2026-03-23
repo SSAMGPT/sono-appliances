@@ -372,7 +372,7 @@
         <div class="cat-sticky-wrap">
           <div id="catBadges"></div>
         </div>
-        <!-- 독립 2행 캐러셀 -->
+        <!-- 독립 2행 캐러셀 (데스크탑) -->
         <div class="app-dual-rows" id="appDualRows">
           <div class="app-row-outer" id="appRow1">
             <div class="app-row-track" id="appTrack1"></div>
@@ -380,6 +380,11 @@
           <div class="app-row-outer" id="appRow2">
             <div class="app-row-track" id="appTrack2"></div>
           </div>
+        </div>
+        <!-- 모바일 슬라이더 (2열 페이지) -->
+        <div id="appSlider" class="app-slider">
+          <div class="app-slider__track" id="appSliderTrack"></div>
+          <div class="app-slider__dots" id="appSliderDots"></div>
         </div>
       </div>
 
@@ -887,6 +892,75 @@
           s1.start();
           s2.start();
         });
+        renderSlider(products);  /* 모바일 슬라이더 동시 갱신 */
+      }
+
+      /* ── 모바일 슬라이더 (2열 페이지, 10초 자동 + 터치 드래그) ─── */
+      let sliderTimer = null;
+
+      function renderSlider(products) {
+        const track  = document.getElementById('appSliderTrack');
+        const dotsEl = document.getElementById('appSliderDots');
+        if (!track) return;
+
+        if (sliderTimer) { clearInterval(sliderTimer); sliderTimer = null; }
+        track.innerHTML = '';
+        if (dotsEl) dotsEl.innerHTML = '';
+
+        if (!products.length) {
+          track.innerHTML = '<p class="loading-text" style="padding:2rem 1rem">해당 카테고리의 제품이 없습니다.</p>';
+          return;
+        }
+
+        products.forEach(p => {
+          const card = makeCard(p);
+          card.addEventListener('click', () => {
+            document.querySelectorAll('#appSliderTrack .app-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            sel.appliance = card.querySelector('.app-card__name').textContent;
+            refreshSubmit();
+          });
+          track.appendChild(card);
+        });
+
+        const perPage = 2;
+        const pages   = Math.ceil(products.length / perPage);
+        let   curPage = 0;
+        const dots    = [];
+
+        if (dotsEl && pages > 1) {
+          for (let i = 0; i < pages; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'app-slider__dot' + (i === 0 ? ' active' : '');
+            dot.addEventListener('click', () => goPage(i));
+            dotsEl.appendChild(dot);
+            dots.push(dot);
+          }
+        }
+
+        function goPage(pg) {
+          curPage = ((pg % pages) + pages) % pages;
+          track.style.transform = 'translateX(-' + (curPage * 100) + '%)';
+          dots.forEach((d, i) => d.classList.toggle('active', i === curPage));
+        }
+
+        sliderTimer = setInterval(() => goPage(curPage + 1), 10000);
+
+        /* 터치 드래그 */
+        let txStart = 0, txPage = 0, txActive = false;
+        track.addEventListener('touchstart', e => {
+          txStart  = e.touches[0].clientX;
+          txPage   = curPage;
+          txActive = true;
+          clearInterval(sliderTimer);
+        }, { passive: true });
+        track.addEventListener('touchend', e => {
+          if (!txActive) return;
+          txActive = false;
+          const dx = e.changedTouches[0].clientX - txStart;
+          if (Math.abs(dx) > 40) goPage(txPage + (dx < 0 ? 1 : -1));
+          sliderTimer = setInterval(() => goPage(curPage + 1), 10000);
+        });
       }
 
       /* ── 필터 ─── */
@@ -896,6 +970,7 @@
           ? allProducts
           : allProducts.filter(p => p.category === catVal);
         renderTwoRows(filtered);
+        renderSlider(filtered);  /* 모바일 슬라이더 */
         refreshSubmit();
       }
 
