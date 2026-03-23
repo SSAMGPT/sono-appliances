@@ -439,21 +439,23 @@
 
       function update() {
         const formRect = formStep.getBoundingClientRect();
-        const formEnds = formRect.top <= HEADER_H + planH();
+        /* formEnds: 모든 탭바 높이 합산 + 10px 버퍼로 안정적 임계값 */
+        const totalStickyH = HEADER_H + planH() + brandH() + catH();
+        const formEnds = formRect.top <= totalStickyH + 10;
 
         /* ── 플랜 ── */
         if (!planFixed) {
           if (wrap.getBoundingClientRect().top <= planTop() && !formEnds) {
             planFixed = true;
-            pholder.style.height = planH() + 'px';
+            wrap.classList.add('is-fixed');              /* 먼저 is-fixed 적용 */
+            pholder.style.height = planH() + 'px';       /* 그 후 높이 측정 */
             pholder.classList.add('active');
-            wrap.classList.add('is-fixed');
           }
         } else {
           if (pholder.getBoundingClientRect().top > planTop() || formEnds) {
             planFixed = false;
-            pholder.classList.remove('active');
             wrap.classList.remove('is-fixed');
+            pholder.classList.remove('active');
           }
         }
 
@@ -464,10 +466,10 @@
             if (brandWrap.getBoundingClientRect().top <= bt && !formEnds) {
               brandFixed = true;
               brandWrap.style.top = bt + 'px';
-              brandPholder.style.height = brandH() + 'px';
-              brandPholder.classList.add('active');
-              brandWrap.classList.add('is-fixed', 'plan-attached');
+              brandWrap.classList.add('is-fixed', 'plan-attached');  /* 먼저 */
               wrap.classList.add('brand-attached');
+              brandPholder.style.height = brandH() + 'px';           /* 그 후 */
+              brandPholder.classList.add('active');
             }
           } else {
             brandWrap.style.top = bt + 'px';
@@ -488,10 +490,10 @@
             if (catWrap.getBoundingClientRect().top <= ct && !formEnds) {
               catFixed = true;
               catWrap.style.top = ct + 'px';
-              catPholder.style.height = catH() + 'px';
-              catPholder.classList.add('active');
-              catWrap.classList.add('is-fixed', 'plan-attached');
+              catWrap.classList.add('is-fixed', 'plan-attached');     /* 먼저 */
               if (brandWrap) brandWrap.classList.add('brand-attached');
+              catPholder.style.height = catH() + 'px';                /* 그 후 */
+              catPholder.classList.add('active');
             }
           } else {
             catWrap.style.top = ct + 'px';
