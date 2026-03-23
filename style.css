@@ -34,15 +34,15 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--page-x);
-  height: 120px;
-  position: fixed;   /* sticky → fixed */
+  height: 60px;
+  position: fixed;
   top: 0; left: 0; right: 0;
   background: #fff;
   z-index: 100;
 }
 
 /* 헤더 높이만큼 본문 밀어내기 */
-main { padding-top: 120px; }
+main { padding-top: 60px; }
 
 .logo {
   font-size: 2.1rem;
