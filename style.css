@@ -34,7 +34,7 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--page-x);
-  height: 60px;
+  height: 120px;
   position: fixed;
   top: 0; left: 0; right: 0;
   background: #fff;
@@ -42,7 +42,13 @@ html, body {
 }
 
 /* 헤더 높이만큼 본문 밀어내기 */
-main { padding-top: 60px; }
+main { padding-top: 120px; }
+
+/* 모바일: 헤더 높이 절반으로 축소 */
+@media (max-width: 767px) {
+  .site-header { height: 60px; }
+  main { padding-top: 60px; }
+}
 
 .logo {
   font-size: 2.1rem;
@@ -1690,6 +1696,10 @@ main { padding-top: 60px; }
   .app-slider__page .app-card {
     transition: outline-color 0.15s;
     cursor: pointer;
+  }
+  /* 이미지 높이 1.2배 축소 (3/4 ÷ 1.2 = 5/8) */
+  .app-slider__page .app-card__thumb {
+    aspect-ratio: 5 / 8;
   }
   .app-slider__page .app-card:hover  { transform: none; }
   .app-slider__page .app-card.active {
