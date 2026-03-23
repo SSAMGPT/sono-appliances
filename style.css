@@ -1662,8 +1662,12 @@ main { padding-top: 120px; }
 
 @media (max-width: 767px) {
   #appDualRows { display: none !important; }
-  #appSlider   { display: block; overflow: hidden;
-                 margin: 0 calc(-1 * var(--page-x)); }
+
+  /* 슬라이더 컨테이너: 섹션 패딩 안쪽에서 시작 (full-bleed 없음) */
+  #appSlider {
+    display: block;
+    overflow: hidden;
+  }
 
   .app-slider__track {
     display: flex;
@@ -1672,15 +1676,21 @@ main { padding-top: 120px; }
     will-change: transform;
   }
 
-  .app-slider__track .app-card {
-    flex: 0 0 50%;
-    padding: 0 0.3rem;
-    box-sizing: border-box;
-    /* hover 효과 비활성 — 터치 환경 */
-    transition: outline-color 0.15s;
+  /* 한 페이지: 3행 × 2열 그리드 */
+  .app-slider__page {
+    flex: 0 0 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(3, auto);
+    gap: 0.6rem;
   }
-  .app-slider__track .app-card:hover { transform: none; }
-  .app-slider__track .app-card.active {
+
+  .app-slider__page .app-card {
+    transition: outline-color 0.15s;
+    cursor: pointer;
+  }
+  .app-slider__page .app-card:hover   { transform: none; }
+  .app-slider__page .app-card.active  {
     outline: 2.5px solid #0a0a0a;
     outline-offset: 2px;
   }

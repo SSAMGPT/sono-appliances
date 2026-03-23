@@ -895,7 +895,7 @@
         renderSlider(products);  /* 모바일 슬라이더 동시 갱신 */
       }
 
-      /* ── 모바일 슬라이더 (2열 페이지, 10초 자동 + 터치 드래그) ─── */
+      /* ── 모바일 슬라이더 (3행×2열 페이지, 10초 자동 RTL, 마지막서 멈춤) ─── */
       let sliderTimer = null;
 
       function renderSlider(products) {
@@ -908,26 +908,33 @@
         if (dotsEl) dotsEl.innerHTML = '';
 
         if (!products.length) {
-          track.innerHTML = '<p class="loading-text" style="padding:2rem 1rem">해당 카테고리의 제품이 없습니다.</p>';
+          track.innerHTML = '<p class="loading-text" style="padding:2rem 0">해당 카테고리의 제품이 없습니다.</p>';
           return;
         }
 
-        products.forEach(p => {
-          const card = makeCard(p);
-          card.addEventListener('click', () => {
-            document.querySelectorAll('#appSliderTrack .app-card').forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
-            sel.appliance = card.querySelector('.app-card__name').textContent;
-            refreshSubmit();
-          });
-          track.appendChild(card);
-        });
-
-        const perPage = 2;
+        const perPage = 6;  /* 3행 × 2열 */
         const pages   = Math.ceil(products.length / perPage);
         let   curPage = 0;
         const dots    = [];
 
+        /* 페이지별 그리드 생성 */
+        for (let pg = 0; pg < pages; pg++) {
+          const pageEl = document.createElement('div');
+          pageEl.className = 'app-slider__page';
+          products.slice(pg * perPage, (pg + 1) * perPage).forEach(p => {
+            const card = makeCard(p);
+            card.addEventListener('click', () => {
+              track.querySelectorAll('.app-card').forEach(c => c.classList.remove('active'));
+              card.classList.add('active');
+              sel.appliance = card.querySelector('.app-card__name').textContent;
+              refreshSubmit();
+            });
+            pageEl.appendChild(card);
+          });
+          track.appendChild(pageEl);
+        }
+
+        /* 도트 인디케이터 */
         if (dotsEl && pages > 1) {
           for (let i = 0; i < pages; i++) {
             const dot = document.createElement('button');
@@ -939,27 +946,33 @@
         }
 
         function goPage(pg) {
-          curPage = ((pg % pages) + pages) % pages;
+          curPage = Math.max(0, Math.min(pages - 1, pg));  /* 양 끝 클램프 */
           track.style.transform = 'translateX(-' + (curPage * 100) + '%)';
           dots.forEach((d, i) => d.classList.toggle('active', i === curPage));
         }
 
-        sliderTimer = setInterval(() => goPage(curPage + 1), 10000);
+        /* 10초 자동: 마지막 페이지 도달 시 정지 */
+        function scheduleAuto() {
+          if (sliderTimer) clearInterval(sliderTimer);
+          if (curPage >= pages - 1) return;
+          sliderTimer = setInterval(() => {
+            if (curPage < pages - 1) { goPage(curPage + 1); }
+            else { clearInterval(sliderTimer); sliderTimer = null; }
+          }, 10000);
+        }
+        scheduleAuto();
 
         /* 터치 드래그 */
         let txStart = 0, txPage = 0, txActive = false;
         track.addEventListener('touchstart', e => {
-          txStart  = e.touches[0].clientX;
-          txPage   = curPage;
-          txActive = true;
-          clearInterval(sliderTimer);
+          txStart = e.touches[0].clientX; txPage = curPage; txActive = true;
+          if (sliderTimer) { clearInterval(sliderTimer); sliderTimer = null; }
         }, { passive: true });
         track.addEventListener('touchend', e => {
-          if (!txActive) return;
-          txActive = false;
+          if (!txActive) return; txActive = false;
           const dx = e.changedTouches[0].clientX - txStart;
           if (Math.abs(dx) > 40) goPage(txPage + (dx < 0 ? 1 : -1));
-          sliderTimer = setInterval(() => goPage(curPage + 1), 10000);
+          scheduleAuto();
         });
       }
 
