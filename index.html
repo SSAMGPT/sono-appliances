@@ -28,7 +28,15 @@
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
     rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <link rel="stylesheet" href="style.css?v=169b12d" />
+  <link rel="stylesheet" href="style.css?v=local01" />
+  <style>
+    /* 모바일 헤더 강제 적용 — CSS 캐시 무관 */
+    @media (max-width: 768px) {
+      .site-header { height: 60px !important; }
+      main          { padding-top: 60px !important; }
+      .logo         { font-size: 1.5rem !important; }
+    }
+  </style>
 </head>
 
 <body>
@@ -746,8 +754,13 @@
       function makeCard(p) {
         const grad    = CAT_GRAD[p.category] || 'linear-gradient(145deg,#333,#666)';
         const emoji   = CAT_EMOJI[p.category] || '🏠';
+        const isLandscape = ['TV', '노트북'].includes(p.category);
         const bgStyle = p.img_url
-          ? "background-image:url('" + p.img_url + "');background-size:cover;background-position:center top"
+          ? "background-image:url('" + p.img_url + "');" +
+            "background-size:" + (isLandscape ? "contain" : "cover") + ";" +
+            "background-position:" + (isLandscape ? "center" : "center top") + ";" +
+            "background-repeat:no-repeat;" +
+            (isLandscape ? "background-color:#f8f8f8;" : "")
           : 'background:' + grad;
         const card = document.createElement('article');
         card.className = 'app-card';

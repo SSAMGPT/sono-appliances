@@ -44,10 +44,11 @@ html, body {
 /* 헤더 높이만큼 본문 밀어내기 */
 main { padding-top: 120px; }
 
-/* 모바일: 헤더 높이 절반으로 축소 */
+/* 모바일: 헤더 높이 절반으로 축소 + 로고 크기 축소 */
 @media (max-width: 768px) {
-  .site-header { height: 60px; }
-  main { padding-top: 60px; }
+  .site-header { height: 60px !important; }
+  main          { padding-top: 60px !important; }
+  .logo         { font-size: 1.5rem; }   /* 2.1rem ÷ 1.4 ≈ 1.5rem */
 }
 
 .logo {
