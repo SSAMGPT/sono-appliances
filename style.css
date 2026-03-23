@@ -729,7 +729,7 @@ main { padding-top: 120px; }
   .bento-title { font-size: clamp(1.02rem, 3.84vw, 1.32rem); }
   .bento-desc { font-size: clamp(0.78rem, 2.64vw, 0.96rem); }
   .bento-card { padding: 0.9rem 1rem; }
-  .bento-img { height: 38%; bottom: 0.6rem; right: 0.6rem; }
+  .bento-img { height: 27%; bottom: 0.6rem; right: 0.6rem; }
 }
 
 /* ─── 태블릿 (768px ~ 1024px): 데스크탑 동일 배치 유지 ──────────── */
