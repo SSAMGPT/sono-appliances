@@ -1396,7 +1396,7 @@
 
       <!-- 법적 링크 -->
       <nav class="footer-legal">
-        <a href="#terms" class="footer-legal__link" id="linkTerms">이용약관 및 개인정보처리방침</a>
+        <a href="javascript:void(0)" class="footer-legal__link" id="linkTerms" role="button">이용약관 및 개인정보처리방침</a>
         <span class="footer-legal__sep">|</span>
         <a href="#" class="footer-legal__link">주요정보고지사항</a>
       </nav>
@@ -1471,31 +1471,48 @@
     })();
 
     /* ── 약관 모달 제어 ── */
-    (function() {
+    window.addEventListener('DOMContentLoaded', function() {
       const modal = document.getElementById('termsModal');
       const link  = document.getElementById('linkTerms');
-      const close = modal?.querySelector('.modal-close');
+      if (!modal || !link) return;
+
+      const close = modal.querySelector('.modal-close');
 
       function openModal(e) {
-        if(e) e.preventDefault();
+        if(e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
         modal.classList.add('is-active');
+        modal.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
       }
+
       function closeModal() {
         modal.classList.remove('is-active');
-        if (!document.getElementById('navOverlay').classList.contains('is-open')) {
+        modal.setAttribute('aria-hidden', 'true');
+        // 다른 오버레이(메뉴 등)가 열려있지 않을 때만 스크롤 복구
+        const navOpen = document.getElementById('navOverlay')?.classList.contains('is-open');
+        if (!navOpen) {
           document.body.style.overflow = '';
         }
       }
 
-      if(link) link.addEventListener('click', openModal);
+      link.addEventListener('click', openModal);
       if(close) close.addEventListener('click', closeModal);
-      if(modal) {
-        modal.addEventListener('click', (e) => {
-          if(e.target === modal) closeModal();
-        });
-      }
-    })();
+      
+      // 배경 클릭 시 닫기
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) closeModal();
+      });
+
+      // ESC 키로 닫기
+      window.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+          closeModal();
+        }
+      });
+    });
   </script>
 
   <!-- 약관 모달 구조 -->
