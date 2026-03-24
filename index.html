@@ -479,46 +479,44 @@
       const brandPholder = brandWrap ? mkHolder('brand-sticky-placeholder', brandWrap) : null;
       const catPholder   = catWrap   ? mkHolder('cat-sticky-placeholder',   catWrap)   : null;
 
-      /* ── 헤더 높이는 resize 시에만 재측정 (캐싱) ── */
+      /* 헤더 높이만 캐싱 (resize 시 갱신) */
       let cachedHeaderH = document.querySelector('.site-header')?.offsetHeight || 60;
-      let cachedPlanH   = 0, cachedBrandH = 0, cachedCatH = 0;
-
-      function refreshSizes() {
+      window.addEventListener('resize', () => {
         cachedHeaderH = document.querySelector('.site-header')?.offsetHeight || 60;
-        cachedPlanH   = wrap.offsetHeight;
-        cachedBrandH  = brandWrap ? brandWrap.offsetHeight : 0;
-        cachedCatH    = catWrap   ? catWrap.offsetHeight   : 0;
-      }
-      refreshSizes();
+      });
 
       let planFixed = false, brandFixed = false, catFixed = false;
       let rafId = null;
 
       function update() {
-        /* ── 모든 getBoundingClientRect를 한 번에 읽어 layout thrashing 방지 ── */
-        const wrapTop      = wrap.getBoundingClientRect().top;
-        const pholderTop   = pholder.getBoundingClientRect().top;
-        const brandTop_r   = brandWrap    ? brandWrap.getBoundingClientRect().top    : Infinity;
-        const bpholderTop  = brandPholder ? brandPholder.getBoundingClientRect().top : Infinity;
-        const catTop_r     = catWrap      ? catWrap.getBoundingClientRect().top      : Infinity;
-        const cpholderTop  = catPholder   ? catPholder.getBoundingClientRect().top   : Infinity;
-        const formTop      = formStep     ? formStep.getBoundingClientRect().top      : Infinity;
-        const footerTop    = footer       ? footer.getBoundingClientRect().top        : Infinity;
+        /* ── reads 먼저: offsetHeight + getBoundingClientRect 한 번에 ── */
+        const planH  = wrap.offsetHeight;
+        const brandH = brandWrap ? brandWrap.offsetHeight : 0;
+        const catH   = catWrap   ? catWrap.offsetHeight   : 0;
+        const hh     = cachedHeaderH;
 
-        const hh = cachedHeaderH;
-        const totalStickyH = hh + cachedPlanH + cachedBrandH + cachedCatH;
+        const wrapTop     = wrap.getBoundingClientRect().top;
+        const pholderTop  = pholder.getBoundingClientRect().top;
+        const brandTop_r  = brandWrap    ? brandWrap.getBoundingClientRect().top    : Infinity;
+        const bpholderTop = brandPholder ? brandPholder.getBoundingClientRect().top : Infinity;
+        const catTop_r    = catWrap      ? catWrap.getBoundingClientRect().top      : Infinity;
+        const cpholderTop = catPholder   ? catPholder.getBoundingClientRect().top   : Infinity;
+        const formTop     = formStep     ? formStep.getBoundingClientRect().top      : Infinity;
+        const footerTop   = footer       ? footer.getBoundingClientRect().top        : Infinity;
+
+        const totalStickyH = hh + planH + brandH + catH;
         const formEnds = formStep
-          ? formTop  <= totalStickyH + 10
+          ? formTop   <= totalStickyH + 10
           : footerTop <= totalStickyH + 10;
 
-        /* ── 플랜 ── */
+        /* ── writes: 플랜 ── */
         const pt = hh;
         if (!planFixed) {
           if (wrapTop <= pt && !formEnds) {
             planFixed = true;
             wrap.style.top = pt + 'px';
             wrap.classList.add('is-fixed');
-            pholder.style.height = cachedPlanH + 'px';
+            pholder.style.height = planH + 'px';
             pholder.classList.add('active');
           }
         } else {
@@ -531,16 +529,16 @@
           }
         }
 
-        /* ── 브랜드 ── */
+        /* ── writes: 브랜드 ── */
         if (brandWrap && brandPholder) {
-          const bt = hh + (planFixed ? cachedPlanH : 0);
+          const bt = hh + (planFixed ? planH : 0);
           if (!brandFixed) {
             if (brandTop_r <= bt && !formEnds) {
               brandFixed = true;
               brandWrap.style.top = bt + 'px';
               brandWrap.classList.add('is-fixed', 'plan-attached');
               wrap.classList.add('brand-attached');
-              brandPholder.style.height = cachedBrandH + 'px';
+              brandPholder.style.height = brandH + 'px';
               brandPholder.classList.add('active');
             }
           } else {
@@ -555,16 +553,16 @@
           }
         }
 
-        /* ── 가전 종류 ── */
+        /* ── writes: 가전 종류 ── */
         if (catWrap && catPholder) {
-          const ct = hh + (planFixed ? cachedPlanH : 0) + (brandFixed ? cachedBrandH : 0);
+          const ct = hh + (planFixed ? planH : 0) + (brandFixed ? brandH : 0);
           if (!catFixed) {
             if (catTop_r <= ct && !formEnds) {
               catFixed = true;
               catWrap.style.top = ct + 'px';
               catWrap.classList.add('is-fixed', 'plan-attached');
               if (brandWrap) brandWrap.classList.add('brand-attached');
-              catPholder.style.height = cachedCatH + 'px';
+              catPholder.style.height = catH + 'px';
               catPholder.classList.add('active');
             }
           } else {
@@ -590,9 +588,10 @@
       }
 
       window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', () => { refreshSizes(); update(); });
+      window.addEventListener('resize', update);
       update();
     })();
+
   </script>
 
 

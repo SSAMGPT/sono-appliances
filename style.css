@@ -2445,7 +2445,6 @@ main { padding-top: 120px; }
     arc by calc(0px - var(--nc-r)) calc(0px - var(--nc-r)) of var(--nc-r) cw,
     vline to calc(var(--nc-s) + 2 * var(--nc-r))
   );
-}
 
 /* Best 알약 배지 — 노치 위에 절대 배치 */
 .plan-card-best-notch {
@@ -2781,10 +2780,8 @@ html { scroll-behavior: smooth; }
 /* ═══════════════════════════════════════════════════════════════
    📱 모바일 성능 최적화
    ─ backdrop-filter blur 는 모바일 GPU 에서 매우 비쌈 → 비활성화
-   ─ content-visibility: auto 로 오프스크린 섹션 렌더링 생략
    ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 767px) {
-  /* blur 비활성화 (step-card, consult glassmorphism 등) */
   .step-card,
   .sel-bar__inner,
   [class*="glass"],
@@ -2792,11 +2789,4 @@ html { scroll-behavior: smooth; }
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
-
-  /* 상담 섹션: 화면에 보이지 않으면 렌더링 건너뜀 */
-  .section-consult {
-    content-visibility: auto;
-    contain-intrinsic-size: 0 800px; /* 예상 높이 힌트 */
-  }
 }
-
