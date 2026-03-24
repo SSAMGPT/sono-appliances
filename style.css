@@ -2783,7 +2783,8 @@ html { scroll-behavior: smooth; }
   margin-bottom: 0.6rem;
 }
 .static-form__guide {
-  font-size: 0.95rem;
+  font-size: 1.14rem;
+  font-weight: 600;
   color: #fff;
   margin-bottom: 1.6rem;
 }
