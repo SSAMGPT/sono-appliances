@@ -1398,7 +1398,7 @@
       <nav class="footer-legal">
         <a href="javascript:void(0)" class="footer-legal__link" id="linkTerms" role="button">이용약관 및 개인정보처리방침</a>
         <span class="footer-legal__sep">|</span>
-        <a href="#" class="footer-legal__link">주요정보고지사항</a>
+        <a href="javascript:void(0)" class="footer-legal__link" id="linkNotice" role="button">주요정보고지사항</a>
       </nav>
 
       <!-- 회사명 -->
@@ -1470,47 +1470,47 @@
       });
     })();
 
-    /* ── 약관 모달 제어 ── */
+    /* ── 공통 모달 제어 ── */
     window.addEventListener('DOMContentLoaded', function() {
-      const modal = document.getElementById('termsModal');
-      const link  = document.getElementById('linkTerms');
-      if (!modal || !link) return;
+      const body = document.body;
 
-      const close = modal.querySelector('.modal-close');
-
-      function openModal(e) {
-        if(e) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
+      function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
         modal.classList.add('is-active');
         modal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
+        body.style.overflow = 'hidden';
       }
 
       function closeModal() {
-        modal.classList.remove('is-active');
-        modal.setAttribute('aria-hidden', 'true');
-        // 다른 오버레이(메뉴 등)가 열려있지 않을 때만 스크롤 복구
-        const navOpen = document.getElementById('navOverlay')?.classList.contains('is-open');
-        if (!navOpen) {
-          document.body.style.overflow = '';
+        const activeModal = document.querySelector('.modal-overlay.is-active');
+        if (!activeModal) return;
+        
+        activeModal.classList.remove('is-active');
+        activeModal.setAttribute('aria-hidden', 'true');
+        
+        // 다른 오버레이가 안 열려있을 때만 스크롤 복구
+        if (!document.getElementById('navOverlay').classList.contains('is-open')) {
+          body.style.overflow = '';
         }
       }
 
-      link.addEventListener('click', openModal);
-      if(close) close.addEventListener('click', closeModal);
-      
-      // 배경 클릭 시 닫기
-      modal.addEventListener('click', function(e) {
-        if (e.target === modal) closeModal();
+      // 이용약관 링크
+      document.getElementById('linkTerms')?.addEventListener('click', () => openModal('termsModal'));
+      // 주요정보고지사항 링크
+      document.getElementById('linkNotice')?.addEventListener('click', () => openModal('noticeModal'));
+
+      // 닫기 버튼 및 배경 클릭 처리
+      document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.querySelector('.modal-close')?.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeModal();
+        });
       });
 
-      // ESC 키로 닫기
-      window.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modal.classList.contains('is-active')) {
-          closeModal();
-        }
+      // ESC 키 대응
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
       });
     });
   </script>
@@ -1600,6 +1600,21 @@
 
         <h4>8. 개인정보 처리방침 변경</h4>
         <p>이 개인정보 처리방침은 2026년 1월 1일부터 적용되며, 법령 및 방침에 따른 변경내용의 추가, 삭제 및 정정이 있는 경우에는 변경사항의 시행 7일 전부터 공지사항을 통하여 고지할 것입니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 주요정보고지사항 모달 -->
+  <div class="modal-overlay" id="noticeModal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">주요정보고지사항</h3>
+        <button class="modal-close" aria-label="닫기">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img class="modal-img" src="img/smartcare-notice.png" alt="주요정보고지사항 안내 이미지">
       </div>
     </div>
   </div>

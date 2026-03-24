@@ -2900,6 +2900,15 @@ html { scroll-behavior: smooth; }
   font-size: 0.95rem;
 }
 
+.modal-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.modal-img:not(:last-child) { margin-bottom: 20px; }
+
 /* 모달 본문 텍스트 스타일 */
 .modal-body h4 {
   font-size: 1.1rem;
