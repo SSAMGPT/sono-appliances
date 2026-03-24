@@ -159,7 +159,10 @@ main { padding-top: 120px; }
   /* 데스크탑+에서 히어로 수직 간격 조정 */
   .hero {
     padding-top: 0.5rem;   /* 헤더~프레임 간격 축소 */
-    gap: 3rem;              /* 프레임~타이틀 간격 확보 */
+    gap: 4rem;              /* 프레임~타이틀 간격 확보 */
+  }
+  .hero-bottom {
+    padding-top: 2rem;     /* 타이틀 상단 여백 추가 */
   }
   /* 공통 서클 스타일 */
   .hero-card-circle {
