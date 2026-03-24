@@ -143,9 +143,9 @@ main { padding-top: 120px; }
   transform: translateX(-50%);
   z-index: 10;
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
-  padding: 8px 16px;
+  padding: 7px 13px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.20);
   backdrop-filter: blur(10px);
@@ -155,14 +155,14 @@ main { padding-top: 120px; }
 }
 
 .slide-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   border: 1.5px solid rgba(255, 255, 255, 0.85);
   background: transparent;
   cursor: pointer;
   padding: 0;
-  transition: background 0.3s ease, transform 0.3s ease, width 0.3s ease;
+  transition: background 0.3s ease, transform 0.3s ease;
   flex-shrink: 0;
 }
 
