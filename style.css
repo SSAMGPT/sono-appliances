@@ -2657,7 +2657,7 @@ html { scroll-behavior: smooth; }
   padding-left: 0.5rem;
 }
 
-/* ─── 선택 상품 플로팅 바 (Premium Redesign) ───────────────────── */
+/* ─── 선택 상품 플로팅 바 (Premium Vertical) ────────────────────── */
 .sel-bar {
   position: fixed;
   left: 0; right: 0; bottom: 0;
@@ -2677,52 +2677,56 @@ html { scroll-behavior: smooth; }
   background: #0a0a0a;
   border-radius: 20px 20px 0 0;
   box-shadow: 0 -8px 40px rgba(0,0,0,0.4);
-  padding: 1rem 1.2rem 0.8rem;
+  padding: 1.5rem 1.6rem 1.4rem;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
-  max-width: 680px;
+  gap: 1.2rem;
+  max-width: 600px;
   margin: 0 auto;
   border: 1px solid rgba(255,255,255,0.08);
   border-bottom: none;
 }
 
-/* 상단: 2열 정보 영역 (밸런스 조정) */
-.sel-bar__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  gap: 1.2rem;
-  padding-bottom: 0.8rem;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+/* 취소 버튼 (우측 상단 고정) */
+.sel-bar__cancel {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.35);
+  padding: 0.4rem;
+  z-index: 10;
+  transition: color 0.15s;
 }
+.sel-bar__cancel:hover { color: #fff; }
 
-/* 왼쪽: 가전 정보 */
-.sel-bar__product {
-  flex: 1;
+/* 1단: 가전 정보 */
+.sel-bar__product-row {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
-  min-width: 0;
-  padding: 0.2rem 0;
+  gap: 1rem;
+  padding-right: 2.22rem;
 }
 .sel-bar__thumb {
-  width: 42px;
-  height: 42px;
-  border-radius: 8px;
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
   background: #fff center/contain no-repeat;
   flex-shrink: 0;
-  padding: 3px;
+  padding: 4px;
 }
 .sel-bar__text { flex: 1; min-width: 0; }
 .sel-bar__meta {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   color: rgba(255,255,255,0.5);
-  margin-bottom: 0.1rem;
+  margin-bottom: 0.15rem;
   font-weight: 500;
 }
 .sel-bar__name {
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: #fff;
   white-space: nowrap;
@@ -2730,81 +2734,56 @@ html { scroll-behavior: smooth; }
   text-overflow: ellipsis;
 }
 
-/* 오른쪽: 플랜 상세 정보 */
-.sel-bar__detail {
-  flex: 1.5; /* 정보를 좀 더 넉넉하게 */
+/* 2단: 상세 정보 (박스형 수직 적층) */
+.sel-bar__detail-box {
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 0.15rem;
-  min-width: 0;
-  border-left: 1px solid rgba(255,255,255,0.1);
-  padding-left: 1rem;
+  gap: 0.3rem;
 }
 .sel-bar__detail-line {
-  font-size: 0.75rem; 
-  color: rgba(255,255,255,0.5);
-  line-height: 1.4;
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.45;
   word-break: keep-all;
 }
 .sel-bar__detail-line--highlight {
   color: #a0ec06;
   font-weight: 700;
+  font-size: 0.98rem;
+  margin-top: 0.1rem;
 }
 
-/* 하단: 액션 바 */
-.sel-bar__footer {
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-}
-
-.sel-bar__cancel {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: rgba(255,255,255,0.4);
-  padding: 0.5rem 0.2rem;
-  flex-shrink: 0;
-  transition: color 0.15s;
-}
-.sel-bar__cancel:hover { color: #fff; }
-
+/* 3단: 메인 신청 버튼 */
 .sel-bar__cta {
-  flex: 1;
-  padding: 0.9rem 1.5rem;
+  width: 100%;
+  padding: 1.1rem;
   border: none;
   border-radius: 12px;
   background: #A4E43F;
   color: #0a0a0a;
-  font-size: 1.02rem;
+  font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: -0.01em;
   cursor: pointer;
   transition: background 0.15s, transform 0.1s;
+  margin-top: 0.2rem;
 }
 .sel-bar__cta:hover  { background: #96d630; transform: translateY(-1px); }
 .sel-bar__cta:active { transform: scale(0.98); }
 
 /* 모바일 대응 */
-/* 모바일 대응 (밸런스 최적화) */
 @media (max-width: 640px) {
-  .sel-bar__header {
+  .sel-bar__inner {
+    padding: 1.2rem 1.2rem 1.2rem;
     gap: 0.8rem;
   }
-  .sel-bar__detail {
-    padding-left: 0.8rem;
-    flex: 1.6; /* 텍스트가 많으므로 비율 더 확대 */
-  }
-  .sel-bar__inner {
-    padding: 0.8rem;
-    gap: 0.6rem;
-  }
-  .sel-bar__footer {
-    gap: 0.6rem;
-  }
+  .sel-bar__name { font-size: 1.08rem; }
+  .sel-bar__detail-box { padding: 0.85rem 1.1rem; }
+  .sel-bar__detail-line { font-size: 0.82rem; }
+  .sel-bar__cta { padding: 1rem; font-size: 1rem; }
 }
 
 /* ─── 푸터 위 고정 상담 신청 섹션 ──────────────────────────────── */
