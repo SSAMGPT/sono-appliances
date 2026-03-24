@@ -111,13 +111,18 @@
           <div class="hero-frame" id="heroFrame">
             <div class="slides-track" id="slidesTrack">
 
-              <!-- ① 첫 번째 슬라이드: 이미지 슬라이드 (데스크탑·태블릿 전용) -->
+              <!-- ① 첫 번째 슬라이드: 이미지 슬라이드 (데스크탑·태블릿 + 모바일) -->
               <div class="frame-slide frame-slide--img-only" data-slide="0">
-                <img
-                  class="slide-full-img"
-                  src="img/sono-slide-01.png"
-                  alt="소노 스마트케어 330 — 가전 렌탈금 만기에 100% 돌려받으세요"
-                />
+                <picture>
+                  <!-- 모바일: 세로 이미지 -->
+                  <source media="(max-width: 767px)" srcset="img/sono-slide-mobile.png" />
+                  <!-- 데스크탑·태블릿: 가로 이미지 -->
+                  <img
+                    class="slide-full-img"
+                    src="img/sono-slide-01.png"
+                    alt="소노 스마트케어 330 — 가전 렌탈금 만기에 100% 돌려받으세요"
+                  />
+                </picture>
               </div>
 
               <!-- ② 두 번째 슬라이드: 기존 콘텐츠 슬라이드 -->
@@ -563,16 +568,11 @@
     (function () {
       const track    = document.getElementById('slidesTrack');
       const slideNum = document.getElementById('slideNum');
-      const isMobile = () => window.innerWidth < 768;
 
-      // 모든 슬라이드
+      // 모든 슬라이드 (모바일 포함 전체 표시)
       const allSlides = Array.from(document.querySelectorAll('.frame-slide'));
 
-      // 현재 뷰에서 유효한 슬라이드 목록 (모바일이면 img-only 제외)
       function getVisibleSlides() {
-        if (isMobile()) {
-          return allSlides.filter(s => !s.classList.contains('frame-slide--img-only'));
-        }
         return allSlides;
       }
 
