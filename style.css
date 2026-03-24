@@ -2675,13 +2675,13 @@ html { scroll-behavior: smooth; }
 .sel-bar__inner {
   position: relative;
   background: #0a0a0a;
-  border-radius: 16px 16px 0 0;
+  border-radius: 20px 20px 0 0;
   box-shadow: 0 -8px 40px rgba(0,0,0,0.4);
-  padding: 0.75rem 1rem 0.5rem;
+  padding: 1rem 1.2rem 0.8rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  max-width: 640px;
+  gap: 0.8rem;
+  max-width: 680px;
   margin: 0 auto;
   border: 1px solid rgba(255,255,255,0.08);
   border-bottom: none;
@@ -2691,9 +2691,9 @@ html { scroll-behavior: smooth; }
 .sel-bar__header {
   display: flex;
   justify-content: space-between;
-  align-items: stretch; /* 좌우 높이를 맞추되 내부는 중앙 정렬 */
+  align-items: stretch;
   gap: 1.2rem;
-  padding-bottom: 0.6rem;
+  padding-bottom: 0.8rem;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
@@ -2707,22 +2707,22 @@ html { scroll-behavior: smooth; }
   padding: 0.2rem 0;
 }
 .sel-bar__thumb {
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
   background: #fff center/contain no-repeat;
   flex-shrink: 0;
-  padding: 2px;
+  padding: 3px;
 }
 .sel-bar__text { flex: 1; min-width: 0; }
 .sel-bar__meta {
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   color: rgba(255,255,255,0.5);
-  margin-bottom: 0.05rem;
+  margin-bottom: 0.1rem;
   font-weight: 500;
 }
 .sel-bar__name {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: #fff;
   white-space: nowrap;
@@ -2742,9 +2742,9 @@ html { scroll-behavior: smooth; }
   padding-left: 1rem;
 }
 .sel-bar__detail-line {
-  font-size: 0.68rem; /* 미세하게 축소하여 가로 공간 확보 */
+  font-size: 0.75rem; 
   color: rgba(255,255,255,0.5);
-  line-height: 1.35;
+  line-height: 1.4;
   word-break: keep-all;
 }
 .sel-bar__detail-line--highlight {
@@ -2756,7 +2756,7 @@ html { scroll-behavior: smooth; }
 .sel-bar__footer {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 1.2rem;
 }
 
 .sel-bar__cancel {
@@ -2774,12 +2774,12 @@ html { scroll-behavior: smooth; }
 
 .sel-bar__cta {
   flex: 1;
-  padding: 0.6rem 1rem;
+  padding: 0.9rem 1.5rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   background: #A4E43F;
   color: #0a0a0a;
-  font-size: 0.85rem;
+  font-size: 1.02rem;
   font-weight: 800;
   letter-spacing: -0.01em;
   cursor: pointer;
