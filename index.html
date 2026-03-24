@@ -441,9 +441,9 @@
       <!-- 선택 상품 플로팅 바 (하단에서 슬라이드업) -->
       <div class="sel-bar" id="selBar" aria-hidden="true">
         <div class="sel-bar__inner">
-          <!-- 상단: 2열 정보 영역 (슬림형) -->
-          <div class="sel-bar__header">
-            <!-- 왼쪽: 가전 정보 -->
+          <!-- 1단 싱글 라인 구조 -->
+          <div class="sel-bar__row">
+            <!-- 1. 가전 정보 -->
             <div class="sel-bar__product">
               <div class="sel-bar__thumb" id="selBarThumb"></div>
               <div class="sel-bar__text">
@@ -451,19 +451,20 @@
                 <div class="sel-bar__name" id="selBarName"></div>
               </div>
             </div>
-            <!-- 오른쪽: 상세 정보 -->
+            
+            <!-- 2. 상세 정보 (세로선 구분) -->
             <div class="sel-bar__detail" id="selBarDetail">
               <div class="sel-bar__detail-line" id="sbdLine1"></div>
               <div class="sel-bar__detail-line sel-bar__detail-line--highlight" id="sbdLine2"></div>
             </div>
-          </div>
-          
-          <!-- 하단: 액션 바 (취소 + 신청) -->
-          <div class="sel-bar__footer">
-            <button class="sel-bar__cancel" id="selBarCancel" type="button">취소</button>
-            <button class="sel-bar__cta" id="selBarCta" type="button">
-              아직 상담 신청을 안하셨나요?
-            </button>
+            
+            <!-- 3. 액션 (취소 + 신청) -->
+            <div class="sel-bar__actions">
+              <button class="sel-bar__cancel" id="selBarCancel" type="button">취소</button>
+              <button class="sel-bar__cta" id="selBarCta" type="button">
+                상담신청
+              </button>
+            </div>
           </div>
         </div>
       </div>
