@@ -428,12 +428,6 @@
           <div class="app-slider__track" id="appSliderTrack"></div>
           <div class="app-slider__dots" id="appSliderDots"></div>
         </div>
-        <!-- 플랜 세부 정보 (가전 이미지 아래) -->
-        <div class="plan-detail-strip" id="planDetailStrip">
-          <div class="plan-detail__line plan-detail__line--product" id="pdLine0"></div>
-          <div class="plan-detail__line" id="pdLine1"></div>
-          <div class="plan-detail__line plan-detail__line--highlight" id="pdLine2"></div>
-        </div>
       </div>
 
       </div>
@@ -842,13 +836,8 @@
         const bestEl = document.getElementById('planCardBest');
         if (bestEl) bestEl.style.display = d.best ? 'inline-flex' : 'none';
         
-        /* 가전 이미지 아래 디테일 스트립 업데이트 (기존) */
-        const l1 = document.getElementById('pdLine1');
-        const l2 = document.getElementById('pdLine2');
         const content1 = d.payment + ' | 월 정액 ' + d.monthly + ' | 서비스 전환 ' + d.switchCount;
         const content2 = d.refund;
-        if (l1) l1.textContent = content1;
-        if (l2) l2.textContent = content2;
 
         /* 새 플로팅 바 내부 상세 정보 업데이트 */
         const sbd1 = document.getElementById('sbdLine1');
@@ -937,12 +926,6 @@
         card.dataset.appBrand = p.brand    || p.category || '';
         card.dataset.name     = p.name     || '';
         card.dataset.model    = p.full_name || '';
-        /* 플랜 정보: 제품의 plan 필드 우선, 없으면 현재 선택 플랜 */
-        const planKey = p.plan || fPlan;
-        const planD   = PLAN_DATA[planKey] || {};
-        const priceStr   = planD.monthly || '';
-        const benefitStr = planD.refund || '';
-
         card.innerHTML =
           '<div class="app-card__frame" style="' + frameStyle + '">' +
             (!p.img_url ? '<span class="app-card__emoji">' + emoji + '</span>' : '') +
@@ -951,22 +934,6 @@
             '<span class="app-card__brand">' + (p.brand || p.category || '') + '</span>' +
             (p.full_name ? '<h4 class="app-card__name">' + p.full_name + '</h4>' : '') +
             '<p class="app-card__product-name">' + p.name + '</p>' +
-            (priceStr || benefitStr
-              ? '<dl class="app-card__plan-info">' +
-                  (priceStr
-                    ? '<div class="app-card__plan-row">' +
-                        '<dt>예상 요금</dt>' +
-                        '<dd>' + priceStr + '</dd>' +
-                      '</div>'
-                    : '') +
-                  (benefitStr
-                    ? '<div class="app-card__plan-row app-card__plan-row--benefit">' +
-                        '<dt>예상 혜택</dt>' +
-                        '<dd>' + benefitStr + '</dd>' +
-                      '</div>'
-                    : '') +
-                '</dl>'
-              : '') +
           '</div>';
         return card;
       }
@@ -1054,9 +1021,6 @@
           sel.img       = card.dataset.imgUrl  || '';
           sel.appBrand  = card.dataset.appBrand || '';
           sel.model     = card.dataset.model    || '';
-          /* plan-detail-strip 상품명 업데이트 */
-          const pdl0 = document.getElementById('pdLine0');
-          if (pdl0) pdl0.textContent = (sel.appBrand ? sel.appBrand + ' ' : '') + sel.appliance;
           refreshSubmit();
         });
 
@@ -1143,8 +1107,6 @@
               track.querySelectorAll('.app-card').forEach(c => c.classList.remove('active'));
               card.classList.add('active');
               sel.appliance = card.dataset.name     || card.querySelector('.app-card__name')?.textContent || '';
-              const pdl0m = document.getElementById('pdLine0');
-              if (pdl0m) pdl0m.textContent = (card.dataset.appBrand ? card.dataset.appBrand + ' ' : '') + sel.appliance;
               sel.img       = card.dataset.imgUrl   || '';
               sel.appBrand  = card.dataset.appBrand || '';
               sel.model     = card.dataset.model    || '';
