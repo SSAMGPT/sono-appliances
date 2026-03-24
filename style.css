@@ -2673,10 +2673,11 @@ html { scroll-behavior: smooth; }
 }
 
 .sel-bar__inner {
+  position: relative;
   background: #0a0a0a;
   border-radius: 16px 16px 0 0;
   box-shadow: 0 -8px 40px rgba(0,0,0,0.4);
-  padding: 0.7rem 1rem 0.4rem;
+  padding: 0.75rem 1rem 0.4rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -2693,6 +2694,7 @@ html { scroll-behavior: smooth; }
   align-items: flex-start;
   gap: 1rem;
   padding-bottom: 0.5rem;
+  padding-right: 2rem; /* 취소 버튼 자리 확보 */
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
@@ -2757,14 +2759,17 @@ html { scroll-behavior: smooth; }
 }
 
 .sel-bar__cancel {
+  position: absolute;
+  top: 0.6rem;
+  right: 1rem;
+  z-index: 10;
   background: none;
   border: none;
   cursor: pointer;
   font-size: 0.85rem;
   font-weight: 500;
   color: rgba(255,255,255,0.4);
-  padding: 0.5rem 0.2rem;
-  flex-shrink: 0;
+  padding: 0.4rem;
   transition: color 0.15s;
 }
 .sel-bar__cancel:hover { color: #fff; }
