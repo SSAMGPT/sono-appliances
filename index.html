@@ -441,17 +441,30 @@
       <!-- 선택 상품 플로팅 바 (하단에서 슬라이드업) -->
       <div class="sel-bar" id="selBar" aria-hidden="true">
         <div class="sel-bar__inner">
-          <div class="sel-bar__row">
-            <div class="sel-bar__thumb" id="selBarThumb"></div>
-            <div class="sel-bar__text">
-              <div class="sel-bar__meta" id="selBarMeta"></div>
-              <div class="sel-bar__name" id="selBarName"></div>
+          <!-- 상단 정보 영역 -->
+          <div class="sel-bar__header">
+            <!-- 왼쪽: 가전 정보 -->
+            <div class="sel-bar__product">
+              <div class="sel-bar__thumb" id="selBarThumb"></div>
+              <div class="sel-bar__text">
+                <div class="sel-bar__meta" id="selBarMeta"></div>
+                <div class="sel-bar__name" id="selBarName"></div>
+              </div>
             </div>
-            <button class="sel-bar__cancel" id="selBarCancel" type="button">취소</button>
+            <!-- 오른쪽: 상세 정보 (기존 블랙 카드 내용) -->
+            <div class="sel-bar__detail" id="selBarDetail">
+              <div class="sel-bar__detail-line" id="sbdLine1"></div>
+              <div class="sel-bar__detail-line sel-bar__detail-line--highlight" id="sbdLine2"></div>
+            </div>
           </div>
-          <button class="sel-bar__cta" id="selBarCta" type="button">
-            아직 상담 신청을 안하셨나요?
-          </button>
+          
+          <!-- 하단 버튼 영역 -->
+          <div class="sel-bar__footer">
+            <button class="sel-bar__cancel" id="selBarCancel" type="button">취소</button>
+            <button class="sel-bar__cta" id="selBarCta" type="button">
+              아직 상담 신청을 안하셨나요?
+            </button>
+          </div>
         </div>
       </div>
 
@@ -825,17 +838,23 @@
       function updatePlanCard(value) {
         const d = PLAN_DATA[value];
         if (!d) return;
-        document.getElementById('planCardTitle').textContent   = d.title;
-        document.getElementById('planCardMonthly').textContent = d.monthly;
-        document.getElementById('planCardPayment').textContent = d.payment;
         document.getElementById('planCardTotal').textContent   = d.total;
         const bestEl = document.getElementById('planCardBest');
-        bestEl.style.display = d.best ? 'inline-flex' : 'none';
-        /* 가전 이미지 아래 디테일 스트립 업데이트 */
+        if (bestEl) bestEl.style.display = d.best ? 'inline-flex' : 'none';
+        
+        /* 가전 이미지 아래 디테일 스트립 업데이트 (기존) */
         const l1 = document.getElementById('pdLine1');
         const l2 = document.getElementById('pdLine2');
-        if (l1) l1.textContent = d.payment + ' | 월 정액 ' + d.monthly + ' | 서비스 전환 ' + d.switchCount;
-        if (l2) l2.textContent = d.refund;
+        const content1 = d.payment + ' | 월 정액 ' + d.monthly + ' | 서비스 전환 ' + d.switchCount;
+        const content2 = d.refund;
+        if (l1) l1.textContent = content1;
+        if (l2) l2.textContent = content2;
+
+        /* 새 플로팅 바 내부 상세 정보 업데이트 */
+        const sbd1 = document.getElementById('sbdLine1');
+        const sbd2 = document.getElementById('sbdLine2');
+        if (sbd1) sbd1.textContent = content1;
+        if (sbd2) sbd2.textContent = content2;
       }
 
       /* ── 배지 렌더 (공통) ─── */

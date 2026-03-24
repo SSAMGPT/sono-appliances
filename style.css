@@ -2657,7 +2657,7 @@ html { scroll-behavior: smooth; }
   padding-left: 0.5rem;
 }
 
-/* ─── 선택 상품 플로팅 바 ──────────────────────────────────────── */
+/* ─── 선택 상품 플로팅 바 (Premium Redesign) ───────────────────── */
 .sel-bar {
   position: fixed;
   left: 0; right: 0; bottom: 0;
@@ -2665,89 +2665,115 @@ html { scroll-behavior: smooth; }
   padding: 0 var(--page-x, 5%) env(safe-area-inset-bottom, 12px);
   pointer-events: none;
   transform: translateY(110%);
-  transition: transform 0.36s cubic-bezier(0.34, 1.26, 0.64, 1);
+  transition: transform 0.45s cubic-bezier(0.2, 1, 0.3, 1);
 }
 .sel-bar.is-open {
   transform: translateY(0);
   pointer-events: auto;
 }
+
 .sel-bar__inner {
-  background: #fff;
-  border-radius: 20px 20px 0 0;
-  box-shadow: 0 -4px 28px rgba(0,0,0,0.12);
-  padding: 1rem 1.1rem;
+  background: #0a0a0a;
+  border-radius: 24px 24px 0 0;
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.4);
+  padding: 1.5rem 1.5rem 1.2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  max-width: 600px;
+  gap: 1.2rem;
+  max-width: 720px;
   margin: 0 auto;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-bottom: none;
 }
-.sel-bar__row {
+
+/* 상단: 2열 정보 영역 */
+.sel-bar__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+/* 왼쪽: 가전 정보 */
+.sel-bar__product {
+  flex: 1;
   display: flex;
   align-items: center;
-  gap: 0.9rem;
+  gap: 1rem;
+  min-width: 0;
 }
 .sel-bar__thumb {
-  width: 56px;
-  height: 56px;
-  border-radius: 10px;
-  background: #f2f2f2 center/contain no-repeat;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: #fff center/contain no-repeat;
   flex-shrink: 0;
+  padding: 4px;
 }
 .sel-bar__text { flex: 1; min-width: 0; }
 .sel-bar__meta {
-  font-size: 0.78rem;
-  color: #888;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 0.2rem;
   font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 0.15rem;
 }
 .sel-bar__name {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  color: #0a0a0a;
+  color: #fff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* 오른쪽: 플랜 상세 정보 */
+.sel-bar__detail {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+  border-left: 1px solid rgba(255,255,255,0.1);
+  padding-left: 1rem;
+}
+.sel-bar__detail-line {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.4;
+  word-break: keep-all;
+}
+.sel-bar__detail-line--highlight {
+  color: #a0ec06;
+  font-weight: 700;
+}
+
+/* 하단: 액션 바 */
+.sel-bar__footer {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
 .sel-bar__cancel {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 0.9rem;
-  color: #aaa;
-  padding: 0.3rem 0.2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.4);
+  padding: 0.8rem 0.5rem;
   flex-shrink: 0;
   transition: color 0.15s;
 }
-.sel-bar__cancel:hover { color: #333; }
-
-/* 이름/연락처 입력 */
-.sel-bar__fields {
-  display: flex;
-  gap: 0.5rem;
-}
-.sel-bar__input {
-  flex: 1;
-  padding: 0.75rem 0.9rem;
-  border: 1.5px solid #e8e8e8;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  color: #0a0a0a;
-  background: #fafafa;
-  outline: none;
-  transition: border-color 0.15s;
-}
-.sel-bar__input::placeholder { color: #bbb; }
-.sel-bar__input:focus { border-color: #A4E43F; background: #fff; }
+.sel-bar__cancel:hover { color: #fff; }
 
 .sel-bar__cta {
-  width: 100%;
-  padding: 1rem;
+  flex: 1;
+  padding: 1rem 1.5rem;
   border: none;
-  border-radius: 14px;
+  border-radius: 12px;
   background: #A4E43F;
   color: #0a0a0a;
   font-size: 1.05rem;
@@ -2756,9 +2782,27 @@ html { scroll-behavior: smooth; }
   cursor: pointer;
   transition: background 0.15s, transform 0.1s;
 }
-.sel-bar__cta:hover  { background: #96d630; }
+.sel-bar__cta:hover  { background: #96d630; transform: translateY(-1px); }
 .sel-bar__cta:active { transform: scale(0.98); }
-.sel-bar__cta:disabled { background: #e0e0e0; color: #aaa; cursor: not-allowed; }
+
+/* 모바일 대응 */
+@media (max-width: 640px) {
+  .sel-bar__header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .sel-bar__detail {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1rem;
+    width: 100%;
+  }
+  .sel-bar__inner {
+    padding: 1.2rem;
+    gap: 1rem;
+  }
+}
 
 /* ─── 푸터 위 고정 상담 신청 섹션 ──────────────────────────────── */
 .static-form-section {
