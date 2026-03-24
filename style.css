@@ -2822,3 +2822,103 @@ html { scroll-behavior: smooth; }
   font-weight: 600;
   padding: 1rem 0;
 }
+
+
+/* ─── 약관 모달 (Terms Modal) ─────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  padding: 20px;
+}
+
+.modal-overlay.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: #fff;
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+
+.modal-overlay.is-active .modal-content {
+  transform: translateY(0);
+}
+
+.modal-header {
+  padding: 24px 32px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0a0a0a;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.modal-close:hover { color: #0a0a0a; }
+
+.modal-body {
+  padding: 32px;
+  overflow-y: auto;
+  line-height: 1.6;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+/* 모달 본문 텍스트 스타일 */
+.modal-body h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0a0a0a;
+  margin: 24px 0 12px;
+}
+.modal-body h4:first-child { margin-top: 0; }
+.modal-body p { margin-bottom: 1rem; }
+.modal-body ul { margin-bottom: 1.5rem; padding-left: 1.2rem; }
+.modal-body li { margin-bottom: 0.5rem; }
+.modal-body strong { color: #0a0a0a; }
+
+/* 모바일 모달 대응 */
+@media (max-width: 600px) {
+  .modal-content {
+    max-height: 90vh;
+    border-radius: 20px;
+  }
+  .modal-header { padding: 20px 24px 14px; }
+  .modal-body   { padding: 24px; font-size: 0.9rem; }
+}
