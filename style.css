@@ -2780,6 +2780,11 @@ html { scroll-behavior: smooth; }
 .static-form__sub {
   font-size: 0.95rem;
   color: #888;
+  margin-bottom: 0.6rem;
+}
+.static-form__guide {
+  font-size: 0.95rem;
+  color: #fff;
   margin-bottom: 1.6rem;
 }
 .static-form__fields {
