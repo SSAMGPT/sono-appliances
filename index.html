@@ -111,7 +111,17 @@
           <div class="hero-frame" id="heroFrame">
             <div class="slides-track" id="slidesTrack">
 
-              <div class="frame-slide" data-slide="0"
+              <!-- ① 첫 번째 슬라이드: 이미지 슬라이드 (데스크탑·태블릿 전용) -->
+              <div class="frame-slide frame-slide--img-only" data-slide="0">
+                <img
+                  class="slide-full-img"
+                  src="img/sono-slide-01.png"
+                  alt="소노 스마트케어 330 — 가전 렌탈금 만기에 100% 돌려받으세요"
+                />
+              </div>
+
+              <!-- ② 두 번째 슬라이드: 기존 콘텐츠 슬라이드 -->
+              <div class="frame-slide" data-slide="1"
                 style="background:#FF5838">
                 <div class="slide-hero-layout">
                   <!-- 좌측 콘텐츠 -->
@@ -550,48 +560,95 @@
 
   <!-- ── 슬라이더 JS ───────────────────────────────────────────── -->
   <script>
-    const track = document.getElementById('slidesTrack');
-    const dots = document.querySelectorAll('.dot');
-    const slideNum = document.getElementById('slideNum');
-    const TOTAL = document.querySelectorAll('.frame-slide').length;
-    let current = 0, busy = false, timer;
+    (function () {
+      const track    = document.getElementById('slidesTrack');
+      const slideNum = document.getElementById('slideNum');
+      const isMobile = () => window.innerWidth < 768;
 
-    track.appendChild(track.querySelector('.frame-slide').cloneNode(true));
+      // 모든 슬라이드
+      const allSlides = Array.from(document.querySelectorAll('.frame-slide'));
 
-  const ICON_COLORS = ['#215B66', '#002EAE', '#D45032', '#192C3B'];
-  function updateIconColor(idx) {
-    const color = ICON_COLORS[idx % TOTAL] || ICON_COLORS[0];
-    document.querySelectorAll('.headline-icon path').forEach(p => p.setAttribute('fill', color));
-  }
+      // 현재 뷰에서 유효한 슬라이드 목록 (모바일이면 img-only 제외)
+      function getVisibleSlides() {
+        if (isMobile()) {
+          return allSlides.filter(s => !s.classList.contains('frame-slide--img-only'));
+        }
+        return allSlides;
+      }
 
-  function moveTo(idx, instant) {
-    const w = document.querySelector('.hero-frame').offsetWidth;
-    track.style.transition = instant ? 'none' : 'transform .6s cubic-bezier(.4,0,.2,1)';
-    track.style.transform = `translateX(${-idx * w}px)`;
-    dots.forEach(d => d.classList.toggle('active', +d.dataset.idx === idx % TOTAL));
-    slideNum.textContent = String((idx % TOTAL) + 1).padStart(2, '0');
-    current = idx;
-    if (!instant) updateIconColor(idx);
-  }
+      // 총 슬라이드 수 텍스트 업데이트
+      const totalSpan = document.querySelector('#btnNext .btn-next__label span:last-child');
+      function updateTotal() {
+        const n = getVisibleSlides().length;
+        if (totalSpan) totalSpan.textContent = String(n).padStart(2, '0');
+      }
 
-    function goTo(idx) {
-      if (busy) return;
-      busy = true;
-      moveTo(idx, false);
-    }
+      let current = 0, busy = false;
 
-    track.addEventListener('transitionend', () => {
-      if (current >= TOTAL) { current = 0; moveTo(0, true); }
-      busy = false;
-    });
+      const ICON_COLORS = ['#215B66', '#002EAE', '#D45032', '#192C3B'];
+      function updateIconColor(visIdx) {
+        const color = ICON_COLORS[visIdx % 4] || ICON_COLORS[0];
+        document.querySelectorAll('.headline-icon path').forEach(p => p.setAttribute('fill', color));
+      }
 
-      // 자동 슬라이드 비활성화 (슬라이드 1개)
-    function startAuto() { /* disabled */ }
+      function moveTo(visIdx, instant) {
+        const slides = getVisibleSlides();
+        const slide  = slides[visIdx];
+        if (!slide) return;
 
-    dots.forEach((d, i) => d.addEventListener('click', () => { goTo(i); }));
-    document.getElementById('btnNext')?.addEventListener('click', () => { goTo(current + 1); });
-    // startAuto() 제거 — 슬라이드 고정
-    updateIconColor(0); // 초기 슬라이드 색상 즉시 적용
+        // 전체 트랙 기준 실제 인덱스
+        const realIdx = allSlides.indexOf(slide);
+        const w = document.querySelector('.hero-frame').offsetWidth;
+
+        track.style.transition = instant ? 'none' : 'transform .6s cubic-bezier(.4,0,.2,1)';
+        track.style.transform  = `translateX(${-realIdx * w}px)`;
+
+        if (slideNum) slideNum.textContent = String(visIdx + 1).padStart(2, '0');
+        current = visIdx;
+        if (!instant) updateIconColor(visIdx);
+      }
+
+      function goTo(visIdx) {
+        if (busy) return;
+        const slides = getVisibleSlides();
+        // 인피니트 루프
+        visIdx = ((visIdx % slides.length) + slides.length) % slides.length;
+        busy = true;
+        moveTo(visIdx, false);
+      }
+
+      track.addEventListener('transitionend', () => { busy = false; });
+
+      // 자동 슬라이드 (복수 슬라이드일 때만)
+      let timer;
+      function startAuto() {
+        clearInterval(timer);
+        if (getVisibleSlides().length > 1) {
+          timer = setInterval(() => goTo(current + 1), 5000);
+        }
+      }
+
+      document.getElementById('btnNext')?.addEventListener('click', () => {
+        clearInterval(timer);
+        goTo(current + 1);
+        startAuto();
+      });
+
+      // 리사이즈 시 슬라이드 재정렬
+      window.addEventListener('resize', () => {
+        clearInterval(timer);
+        current = 0;
+        moveTo(0, true);
+        updateTotal();
+        startAuto();
+      });
+
+      // 초기화
+      updateTotal();
+      moveTo(0, true);
+      updateIconColor(0);
+      startAuto();
+    })();
   </script>
 
   <!-- ── Best Seller 캐러셀 JS (비활성화) ──────────────────────────

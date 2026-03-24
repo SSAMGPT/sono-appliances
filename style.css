@@ -1,6 +1,10 @@
 /* ─── Fonts & Reset ───────────────────────────────────────────────────── */
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+html {
+  scrollbar-gutter: stable; /* 윈도우 스크롤바 레이아웃 쏠림 방지 */
+}
+
 html, body {
   min-height: 100dvh;
   font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -297,6 +301,29 @@ main { padding-top: 120px; }
   height: 100%;
   position: relative;
 }
+
+/* ── 이미지 전용 슬라이드 ────────────────────────────────────── */
+.frame-slide--img-only {
+  background: #f0ece8; /* 이미지 로딩 전 fallback */
+}
+
+.slide-full-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+}
+
+/* 모바일: 이미지 슬라이드 숨김 */
+@media (max-width: 767px) {
+  .frame-slide--img-only {
+    display: none;
+  }
+}
+
 
 .frame-slide-content {
   position: absolute;
