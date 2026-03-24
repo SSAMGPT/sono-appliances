@@ -186,7 +186,19 @@
             </div><!-- /.slides-track -->
           </div><!-- /.hero-frame -->
 
-        </div>
+          <!-- 자동재생 토글 버튼 -->
+          <button class="slide-play-btn" id="slidePlayBtn" aria-label="슬라이드 자동재생 제어">
+            <!-- 재생 중일 때: Pause 아이콘 (클릭하면 멈춤) -->
+            <svg class="slide-play-icon slide-play-icon--pause" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <rect x="5" y="3" width="4" height="18" rx="1"/>
+              <rect x="15" y="3" width="4" height="18" rx="1"/>
+            </svg>
+            <!-- 일시정지 중일 때: Play 아이콘 (클릭하면 재생) -->
+            <svg class="slide-play-icon slide-play-icon--play" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <polygon points="6,3 20,12 6,21"/>
+            </svg>
+          </button>
+
       </div>
 
       <!-- ② 하단: 텍스트 + 배지 -->
@@ -621,17 +633,32 @@
 
       // 자동 슬라이드 (복수 슬라이드일 때만)
       let timer;
+      let isPaused = false;
+      const playBtn = document.getElementById('slidePlayBtn');
+
       function startAuto() {
         clearInterval(timer);
-        if (getVisibleSlides().length > 1) {
+        if (!isPaused && getVisibleSlides().length > 1) {
           timer = setInterval(() => goTo(current + 1), 5000);
         }
       }
 
+      function togglePlay() {
+        isPaused = !isPaused;
+        if (playBtn) playBtn.classList.toggle('is-paused', isPaused);
+        if (isPaused) {
+          clearInterval(timer);
+        } else {
+          startAuto();
+        }
+      }
+
+      if (playBtn) playBtn.addEventListener('click', togglePlay);
+
       document.getElementById('btnNext')?.addEventListener('click', () => {
         clearInterval(timer);
         goTo(current + 1);
-        startAuto();
+        if (!isPaused) startAuto();
       });
 
       // 리사이즈 시 슬라이드 재정렬
@@ -640,7 +667,7 @@
         current = 0;
         moveTo(0, true);
         updateTotal();
-        startAuto();
+        if (!isPaused) startAuto();
       });
 
       // 초기화

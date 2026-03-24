@@ -88,6 +88,47 @@ main { padding-top: 120px; }
 /* ─── 메인 프레임 ─────────────────────────────────────────────────────── */
 .hero-frame-wrap { position: relative; }
 
+/* ── 슬라이드 Play / Pause 토글 버튼 ─────────────────────────── */
+.slide-play-btn {
+  position: absolute;
+  z-index: 10;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: rgba(255, 255, 255, 0.75);
+  transition: color 0.2s, opacity 0.2s;
+  line-height: 0;
+}
+.slide-play-btn:hover { color: #fff; }
+
+/* 기본(재생 중): Pause 아이콘 표시, Play 아이콘 숨김 */
+.slide-play-icon--pause { display: block; }
+.slide-play-icon--play  { display: none;  }
+
+/* 일시정지 상태: Play 아이콘 표시, Pause 아이콘 숨김 */
+.slide-play-btn.is-paused .slide-play-icon--pause { display: none;  }
+.slide-play-btn.is-paused .slide-play-icon--play  { display: block; }
+
+/* 모바일(≤767px): 우측 상단 */
+@media (max-width: 767px) {
+  .slide-play-btn {
+    top: 12px;
+    right: 12px;
+    bottom: auto;
+  }
+}
+
+/* 태블릿·데스크탑(≥768px): 우측 하단 */
+@media (min-width: 768px) {
+  .slide-play-btn {
+    bottom: 18px;
+    right: 20px;
+    top: auto;
+  }
+}
+
+
 /* ── 모바일 기본: 직사각 프레임, 서클 없음 ────────────────────────────── */
 .hero-frame {
   position: relative;
