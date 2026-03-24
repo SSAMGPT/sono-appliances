@@ -1454,7 +1454,7 @@ main { padding-top: 120px; }
 .wizard-body { margin-top: 4vw; }
 
 .wizard-step {
-  border-top: 1.5px solid rgba(10,10,10,0.1);
+  border-top: none;
   padding: 3rem var(--page-x);
 }
 
