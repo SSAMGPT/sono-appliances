@@ -663,16 +663,24 @@
 
       if (playBtn) playBtn.addEventListener('click', togglePlay);
 
-      // 닷 클릭: 항상 전진 방향으로 해당 슬라이드까지 이동
+      // 닷 클릭
+      // - 모바일(≤767px): 어떤 닷이든 다음 슬라이드로 이동 (작은 화면 터치 편의)
+      // - 데스크탑: 해당 닷의 슬라이드로 이동
       document.querySelectorAll('.slide-dot').forEach((dot) => {
         dot.addEventListener('click', () => {
-          const targetReal = parseInt(dot.dataset.idx, 10);
-          const curReal    = current % totalReal;
-          const steps      = (targetReal - curReal + totalReal) % totalReal;
-          if (steps === 0) return;
           clearInterval(timer);
-          busy = true;
-          moveTo(current + steps, false);
+          if (window.innerWidth <= 767) {
+            // 모바일: 항상 다음으로
+            goNext();
+          } else {
+            // 데스크탑: 닷에 해당하는 슬라이드로 전진 이동
+            const targetReal = parseInt(dot.dataset.idx, 10);
+            const curReal    = current % totalReal;
+            const steps      = (targetReal - curReal + totalReal) % totalReal;
+            if (steps === 0) return;
+            busy = true;
+            moveTo(current + steps, false);
+          }
           if (!isPaused) startAuto();
         });
       });
