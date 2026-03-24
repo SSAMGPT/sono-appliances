@@ -450,7 +450,7 @@
             <button class="sel-bar__cancel" id="selBarCancel" type="button">취소</button>
           </div>
           <button class="sel-bar__cta" id="selBarCta" type="button">
-            선택한 상품으로 신청하기 →
+            아직 상담 신청을 안하셨나요?
           </button>
         </div>
       </div>
@@ -1318,7 +1318,7 @@
             console.error('[wizard] consult insert:', error);
             alert('오류가 발생했습니다. 다시 시도해주세요.');
             selCta.disabled = false;
-            selCta.textContent = '선택한 상품으로 신청하기 →';
+            selCta.textContent = '아직 상담 신청을 안하셨나요?';
           } else {
             selBar.classList.remove('is-open');
             document.getElementById('formDone').hidden = false;
