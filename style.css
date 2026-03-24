@@ -335,6 +335,9 @@ main { padding-top: 120px; }
   width: 100%;
   height: 100%;
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;          /* GPU 레이어 승격 → 슬라이드 전환 부드럽게 */
+  -webkit-transform: translateZ(0); /* iOS Safari 최적화 */
+  transform: translateZ(0);
 }
 
 .frame-slide {
@@ -491,7 +494,7 @@ main { padding-top: 120px; }
     inset 0 -2px 2px rgba(255,255,255,0.5),
     0 4px 3px -2px rgba(0,0,0,0.15),
     inset 0 0 0 0 rgba(255,255,255,0.2);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px); /* 모바일에서 비활성화 → 하단 @media에서 해제 */
   padding: 1.1rem 1rem 1rem;
   display: flex;
   flex-direction: column;
@@ -2774,3 +2777,26 @@ html { scroll-behavior: smooth; }
   font-weight: 600;
   padding: 1rem 0;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   📱 모바일 성능 최적화
+   ─ backdrop-filter blur 는 모바일 GPU 에서 매우 비쌈 → 비활성화
+   ─ content-visibility: auto 로 오프스크린 섹션 렌더링 생략
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  /* blur 비활성화 (step-card, consult glassmorphism 등) */
+  .step-card,
+  .sel-bar__inner,
+  [class*="glass"],
+  [style*="backdrop-filter"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* 상담 섹션: 화면에 보이지 않으면 렌더링 건너뜀 */
+  .section-consult {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 800px; /* 예상 높이 힌트 */
+  }
+}
+

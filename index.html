@@ -479,39 +479,51 @@
       const brandPholder = brandWrap ? mkHolder('brand-sticky-placeholder', brandWrap) : null;
       const catPholder   = catWrap   ? mkHolder('cat-sticky-placeholder',   catWrap)   : null;
 
-      const getHeaderH = () =>
-        document.querySelector('.site-header')?.getBoundingClientRect().height || 60;
+      /* ── 헤더 높이는 resize 시에만 재측정 (캐싱) ── */
+      let cachedHeaderH = document.querySelector('.site-header')?.offsetHeight || 60;
+      let cachedPlanH   = 0, cachedBrandH = 0, cachedCatH = 0;
+
+      function refreshSizes() {
+        cachedHeaderH = document.querySelector('.site-header')?.offsetHeight || 60;
+        cachedPlanH   = wrap.offsetHeight;
+        cachedBrandH  = brandWrap ? brandWrap.offsetHeight : 0;
+        cachedCatH    = catWrap   ? catWrap.offsetHeight   : 0;
+      }
+      refreshSizes();
+
       let planFixed = false, brandFixed = false, catFixed = false;
-
-      const planH  = () => wrap.offsetHeight;
-      const brandH = () => brandWrap ? brandWrap.offsetHeight : 0;
-      const catH   = () => catWrap   ? catWrap.offsetHeight   : 0;
-
-      const planTop  = () => getHeaderH();
-      const brandTop = () => getHeaderH() + (planFixed  ? planH()  : 0);
-      const catTop   = () => getHeaderH() + (planFixed  ? planH()  : 0)
-                                          + (brandFixed ? brandH() : 0);
+      let rafId = null;
 
       function update() {
-        const totalStickyH = getHeaderH() + planH() + brandH() + catH();
-        /* formStep이 없으면 항상 sticky 유지, 있으면 진입 시 해제 */
+        /* ── 모든 getBoundingClientRect를 한 번에 읽어 layout thrashing 방지 ── */
+        const wrapTop      = wrap.getBoundingClientRect().top;
+        const pholderTop   = pholder.getBoundingClientRect().top;
+        const brandTop_r   = brandWrap    ? brandWrap.getBoundingClientRect().top    : Infinity;
+        const bpholderTop  = brandPholder ? brandPholder.getBoundingClientRect().top : Infinity;
+        const catTop_r     = catWrap      ? catWrap.getBoundingClientRect().top      : Infinity;
+        const cpholderTop  = catPholder   ? catPholder.getBoundingClientRect().top   : Infinity;
+        const formTop      = formStep     ? formStep.getBoundingClientRect().top      : Infinity;
+        const footerTop    = footer       ? footer.getBoundingClientRect().top        : Infinity;
+
+        const hh = cachedHeaderH;
+        const totalStickyH = hh + cachedPlanH + cachedBrandH + cachedCatH;
         const formEnds = formStep
-          ? formStep.getBoundingClientRect().top <= totalStickyH + 10
-          : (footer ? footer.getBoundingClientRect().top <= totalStickyH + 10 : false);
+          ? formTop  <= totalStickyH + 10
+          : footerTop <= totalStickyH + 10;
 
         /* ── 플랜 ── */
-        const pt = planTop();
+        const pt = hh;
         if (!planFixed) {
-          if (wrap.getBoundingClientRect().top <= pt && !formEnds) {
+          if (wrapTop <= pt && !formEnds) {
             planFixed = true;
             wrap.style.top = pt + 'px';
             wrap.classList.add('is-fixed');
-            pholder.style.height = planH() + 'px';
+            pholder.style.height = cachedPlanH + 'px';
             pholder.classList.add('active');
           }
         } else {
-          wrap.style.top = pt + 'px';   /* 뷰포트 변경 시에도 항상 갱신 */
-          if (pholder.getBoundingClientRect().top > pt || formEnds) {
+          wrap.style.top = pt + 'px';
+          if (pholderTop > pt || formEnds) {
             planFixed = false;
             wrap.style.top = '';
             wrap.classList.remove('is-fixed');
@@ -521,19 +533,19 @@
 
         /* ── 브랜드 ── */
         if (brandWrap && brandPholder) {
-          const bt = brandTop();
+          const bt = hh + (planFixed ? cachedPlanH : 0);
           if (!brandFixed) {
-            if (brandWrap.getBoundingClientRect().top <= bt && !formEnds) {
+            if (brandTop_r <= bt && !formEnds) {
               brandFixed = true;
               brandWrap.style.top = bt + 'px';
-              brandWrap.classList.add('is-fixed', 'plan-attached');  /* 먼저 */
+              brandWrap.classList.add('is-fixed', 'plan-attached');
               wrap.classList.add('brand-attached');
-              brandPholder.style.height = brandH() + 'px';           /* 그 후 */
+              brandPholder.style.height = cachedBrandH + 'px';
               brandPholder.classList.add('active');
             }
           } else {
             brandWrap.style.top = bt + 'px';
-            if (brandPholder.getBoundingClientRect().top > bt || formEnds) {
+            if (bpholderTop > bt || formEnds) {
               brandFixed = false;
               brandWrap.style.top = '';
               brandPholder.classList.remove('active');
@@ -545,19 +557,19 @@
 
         /* ── 가전 종류 ── */
         if (catWrap && catPholder) {
-          const ct = catTop();
+          const ct = hh + (planFixed ? cachedPlanH : 0) + (brandFixed ? cachedBrandH : 0);
           if (!catFixed) {
-            if (catWrap.getBoundingClientRect().top <= ct && !formEnds) {
+            if (catTop_r <= ct && !formEnds) {
               catFixed = true;
               catWrap.style.top = ct + 'px';
-              catWrap.classList.add('is-fixed', 'plan-attached');     /* 먼저 */
+              catWrap.classList.add('is-fixed', 'plan-attached');
               if (brandWrap) brandWrap.classList.add('brand-attached');
-              catPholder.style.height = catH() + 'px';                /* 그 후 */
+              catPholder.style.height = cachedCatH + 'px';
               catPholder.classList.add('active');
             }
           } else {
             catWrap.style.top = ct + 'px';
-            if (catPholder.getBoundingClientRect().top > ct || formEnds) {
+            if (cpholderTop > ct || formEnds) {
               catFixed = false;
               catWrap.style.top = '';
               catPholder.classList.remove('active');
@@ -568,8 +580,17 @@
         }
       }
 
-      window.addEventListener('scroll', update, { passive: true });
-      window.addEventListener('resize', update);
+      /* ── rAF 스로틀: 1프레임에 1번만 실행 ── */
+      function onScroll() {
+        if (rafId) return;
+        rafId = requestAnimationFrame(() => {
+          update();
+          rafId = null;
+        });
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', () => { refreshSizes(); update(); });
       update();
     })();
   </script>
