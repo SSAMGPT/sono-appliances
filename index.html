@@ -449,10 +449,6 @@
             </div>
             <button class="sel-bar__cancel" id="selBarCancel" type="button">취소</button>
           </div>
-          <div class="sel-bar__fields">
-            <input class="sel-bar__input" id="sb_name"  type="text" placeholder="이름" />
-            <input class="sel-bar__input" id="sb_phone" type="tel"  placeholder="연락처" />
-          </div>
           <button class="sel-bar__cta" id="selBarCta" type="button">
             선택한 상품으로 신청하기 →
           </button>
@@ -1315,8 +1311,8 @@
             plan:      sel.plan,
             brand:     sel.brand,
             appliance: sel.appliance,
-            name:      document.getElementById('sb_name')?.value  || '',
-            phone:     document.getElementById('sb_phone')?.value || '',
+            name:      '',
+            phone:     '',
           });
           if (error) {
             console.error('[wizard] consult insert:', error);
