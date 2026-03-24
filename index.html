@@ -199,6 +199,12 @@
             </svg>
           </button>
 
+          <!-- 슬라이드 닷 네비게이션 -->
+          <div class="slide-dots" id="slideDots" role="tablist" aria-label="슬라이드 선택">
+            <button class="slide-dot active" data-idx="0" role="tab" aria-label="슬라이드 1"></button>
+            <button class="slide-dot"        data-idx="1" role="tab" aria-label="슬라이드 2"></button>
+          </div>
+
       </div>
 
       <!-- ② 하단: 텍스트 + 배지 -->
@@ -618,6 +624,11 @@
         if (slideNum) slideNum.textContent = String(visIdx + 1).padStart(2, '0');
         current = visIdx;
         if (!instant) updateIconColor(visIdx);
+
+        // 닷 네비게이션 active 상태 업데이트
+        document.querySelectorAll('.slide-dot').forEach((d, i) => {
+          d.classList.toggle('active', i === visIdx);
+        });
       }
 
       function goTo(visIdx) {
@@ -654,6 +665,16 @@
       }
 
       if (playBtn) playBtn.addEventListener('click', togglePlay);
+
+      // 닷 클릭으로 슬라이드 이동
+      document.querySelectorAll('.slide-dot').forEach((dot) => {
+        dot.addEventListener('click', () => {
+          const idx = parseInt(dot.dataset.idx, 10);
+          clearInterval(timer);
+          goTo(idx);
+          if (!isPaused) startAuto();
+        });
+      });
 
       document.getElementById('btnNext')?.addEventListener('click', () => {
         clearInterval(timer);
