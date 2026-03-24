@@ -335,9 +335,6 @@ main { padding-top: 120px; }
   width: 100%;
   height: 100%;
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;          /* GPU 레이어 승격 → 슬라이드 전환 부드럽게 */
-  -webkit-transform: translateZ(0); /* iOS Safari 최적화 */
-  transform: translateZ(0);
 }
 
 .frame-slide {
@@ -494,7 +491,7 @@ main { padding-top: 120px; }
     inset 0 -2px 2px rgba(255,255,255,0.5),
     0 4px 3px -2px rgba(0,0,0,0.15),
     inset 0 0 0 0 rgba(255,255,255,0.2);
-  backdrop-filter: blur(4px); /* 모바일에서 비활성화 → 하단 @media에서 해제 */
+  backdrop-filter: blur(4px);
   padding: 1.1rem 1rem 1rem;
   display: flex;
   flex-direction: column;
@@ -2445,6 +2442,7 @@ main { padding-top: 120px; }
     arc by calc(0px - var(--nc-r)) calc(0px - var(--nc-r)) of var(--nc-r) cw,
     vline to calc(var(--nc-s) + 2 * var(--nc-r))
   );
+}
 
 /* Best 알약 배지 — 노치 위에 절대 배치 */
 .plan-card-best-notch {
@@ -2775,18 +2773,4 @@ html { scroll-behavior: smooth; }
   font-size: 1rem;
   font-weight: 600;
   padding: 1rem 0;
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   📱 모바일 성능 최적화
-   ─ backdrop-filter blur 는 모바일 GPU 에서 매우 비쌈 → 비활성화
-   ═══════════════════════════════════════════════════════════════ */
-@media (max-width: 767px) {
-  .step-card,
-  .sel-bar__inner,
-  [class*="glass"],
-  [style*="backdrop-filter"] {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
 }
