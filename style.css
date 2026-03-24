@@ -2674,13 +2674,13 @@ html { scroll-behavior: smooth; }
 
 .sel-bar__inner {
   background: #0a0a0a;
-  border-radius: 24px 24px 0 0;
+  border-radius: 20px 20px 0 0;
   box-shadow: 0 -8px 40px rgba(0,0,0,0.4);
-  padding: 1.5rem 1.5rem 1.2rem;
+  padding: 1rem 1.2rem 0.6rem;
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
-  max-width: 720px;
+  gap: 0.8rem;
+  max-width: 680px;
   margin: 0 auto;
   border: 1px solid rgba(255,255,255,0.08);
   border-bottom: none;
@@ -2691,8 +2691,8 @@ html { scroll-behavior: smooth; }
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1.5rem;
-  padding-bottom: 1.2rem;
+  gap: 1.2rem;
+  padding-bottom: 0.8rem;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
@@ -2705,22 +2705,22 @@ html { scroll-behavior: smooth; }
   min-width: 0;
 }
 .sel-bar__thumb {
-  width: 64px;
-  height: 64px;
-  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
   background: #fff center/contain no-repeat;
   flex-shrink: 0;
-  padding: 4px;
+  padding: 3px;
 }
 .sel-bar__text { flex: 1; min-width: 0; }
 .sel-bar__meta {
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   color: rgba(255,255,255,0.5);
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.1rem;
   font-weight: 500;
 }
 .sel-bar__name {
-  font-size: 1.05rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: #fff;
   white-space: nowrap;
@@ -2733,15 +2733,15 @@ html { scroll-behavior: smooth; }
   flex: 1.2;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.2rem;
   min-width: 0;
   border-left: 1px solid rgba(255,255,255,0.1);
-  padding-left: 1rem;
+  padding-left: 0.8rem;
 }
 .sel-bar__detail-line {
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: rgba(255,255,255,0.6);
-  line-height: 1.4;
+  line-height: 1.35;
   word-break: keep-all;
 }
 .sel-bar__detail-line--highlight {
@@ -2753,17 +2753,17 @@ html { scroll-behavior: smooth; }
 .sel-bar__footer {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .sel-bar__cancel {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 500;
   color: rgba(255,255,255,0.4);
-  padding: 0.8rem 0.5rem;
+  padding: 0.6rem 0.2rem;
   flex-shrink: 0;
   transition: color 0.15s;
 }
@@ -2771,12 +2771,12 @@ html { scroll-behavior: smooth; }
 
 .sel-bar__cta {
   flex: 1;
-  padding: 1rem 1.5rem;
+  padding: 0.8rem 1.2rem;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #A4E43F;
   color: #0a0a0a;
-  font-size: 1.05rem;
+  font-size: 0.95rem;
   font-weight: 800;
   letter-spacing: -0.01em;
   cursor: pointer;
