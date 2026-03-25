@@ -1314,20 +1314,18 @@
           selCta.textContent = '신청 중...';
 
           try {
-            /* 구글 앱스 스크립트로 전송 (호환성을 위해 폼 데이터 형태 사용) */
-            const formData = new URLSearchParams();
-            formData.append('name', nameVal);
-            formData.append('phone', "'" + phoneVal);
-            formData.append('plan', PLAN_DATA[sel.plan]?.title || '미선택(상담 후 결정)');
-            formData.append('brand', sel.appBrand || sel.brand || '');
-            formData.append('appliance', (sel.appBrand || sel.brand || '') + ' ' + (sel.appliance || '') + (sel.model ? ' (' + sel.model + ')' : ''));
-            formData.append('source', '별도 CTA1 제품 선택');
-
+            /* 구글 앱스 스크립트로 전송 (CORS 차단을 피하기 위해 text/plain 기반 JSON 형태 전송) */
             await fetch(GAS_URL, {
               method: 'POST',
               mode: 'no-cors',
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: formData
+              body: JSON.stringify({
+                name:      nameVal,
+                phone:     "'" + phoneVal, 
+                plan:      PLAN_DATA[sel.plan]?.title || '미선택(상담 후 결정)',
+                brand:     sel.appBrand || sel.brand || '',
+                appliance: (sel.appBrand || sel.brand || '') + ' ' + (sel.appliance || '') + (sel.model ? ' (' + sel.model + ')' : ''),
+                source:    '별도 CTA1 제품 선택'
+              })
             });
 
             /* 신청 성공 UI 처리: 헤더와 폼 숨기고 메시지 노출 */
@@ -1416,19 +1414,17 @@
         const phoneVal = document.getElementById('sf_phone').value;
 
         try {
-          const formData = new URLSearchParams();
-          formData.append('name', nameVal);
-          formData.append('phone', "'" + phoneVal);
-          formData.append('plan', '');
-          formData.append('brand', '');
-          formData.append('appliance', '');
-          formData.append('source', '별도 CTA2 제품 미선택');
-
           await fetch(GAS_URL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: formData
+            body: JSON.stringify({
+              name:      nameVal,
+              phone:     "'" + phoneVal,
+              plan:      '',
+              brand:     '',
+              appliance: '',
+              source:    '별도 CTA2 제품 미선택'
+            })
           });
 
           form.hidden = true;
