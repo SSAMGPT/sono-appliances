@@ -368,7 +368,7 @@
               <div class="plan-card-rows">
                 <div class="plan-card-row">
                   <span class="plan-card-row__key">월 정액</span>
-                  <span class="plan-card-row__val" id="planCardMonthly">132,000원</span>
+                  <span class="plan-card-row__val" id="planCardMonthly">66,000원</span>
                 </div>
                 <div class="plan-card-row">
                   <span class="plan-card-row__key">납입 방식</span>
@@ -428,33 +428,35 @@
         <div class="sel-bar__inner">
           <!-- 상단: 2열 정보 영역 (울트라 슬림) -->
           <div class="sel-bar__header">
-            <!-- 왼쪽: 가전 정보 -->
             <div class="sel-bar__product">
               <div class="sel-bar__thumb" id="selBarThumb"></div>
               <div class="sel-bar__text">
-                <div class="sel-bar__meta" id="selBarMeta"></div>
-                <div class="sel-bar__name" id="selBarName"></div>
+                <div class="sel-bar__meta"><span id="selBarBrand"></span> — <span id="selBarCategory"></span></div>
+                <div class="sel-bar__name" id="selBarModel"></div>
               </div>
             </div>
-            <!-- 오른쪽: 상세 정보 -->
-            <div class="sel-bar__detail" id="selBarDetail">
-              <div class="sel-bar__detail-line" id="sbdLine1"></div>
-              <div class="sel-bar__detail-line sel-bar__detail-line--highlight" id="sbdLine2"></div>
+            <div class="sel-bar__detail">
+              <div class="sel-bar__detail-line"><span id="selBarPlan"></span> 결합</div>
+              <div class="sel-bar__detail-line--highlight"><span id="selBarMonthly"></span>원/월</div>
             </div>
           </div>
           
+          <!-- 이름/연락처 입력 영역 -->
+          <div class="sel-bar__form" id="selBarForm">
+            <input class="sel-bar__input" id="selName" type="text" placeholder="이름" required />
+            <input class="sel-bar__input" id="selPhone" type="tel" placeholder="연락처" required />
+          </div>
+
           <!-- 하단: 액션 바 (취소 + 신청하기) -->
           <div class="sel-bar__footer">
             <button class="sel-bar__cancel" id="selBarCancel" type="button">취소</button>
             <button class="sel-bar__cta" id="selBarCta" type="button">
               선택한 상품으로 신청하기
             </button>
+            <p class="form-done" id="formDone" hidden>✓ 상담 신청이 완료됐습니다. 곧 연락드리겠습니다.</p>
           </div>
         </div>
       </div>
-
-      <!-- 완료 메시지 -->
-      <p class="form-done" id="formDone" hidden>✓ 상담 신청이 완료됐습니다. 곧 연락드리겠습니다.</p>
 
     </div><!-- /.wizard-body -->
   </section>
@@ -772,7 +774,7 @@
         '스타일러': '👔', '에어컨': '❄️', '공기청정기': '💨', '청소기': '🌀', '노트북': '💻', '정수기': '💧'
       };
 
-      const sel = { plan: null, brand: null, appliance: null, img: null, appBrand: null, model: null };
+      const sel = { plan: null, brand: null, appliance: null, img: null, appBrand: null, model: null, category: null };
       window.__wizSel = sel;
 
       /* 필터 상태 (sel과 분리: 화면 표시 필터용) */
@@ -780,8 +782,11 @@
 
       const selBar    = document.getElementById('selBar');
       const selThumb  = document.getElementById('selBarThumb');
-      const selMeta   = document.getElementById('selBarMeta');
-      const selName   = document.getElementById('selBarName');
+      const selBrand  = document.getElementById('selBarBrand');
+      const selCategory = document.getElementById('selBarCategory');
+      const selModel  = document.getElementById('selBarModel');
+      const selPlan   = document.getElementById('selBarPlan');
+      const selMonthly = document.getElementById('selBarMonthly');
       const selCancel = document.getElementById('selBarCancel');
       const selCta    = document.getElementById('selBarCta');
 
@@ -799,11 +804,15 @@
           } else {
             selThumb.style.backgroundImage = '';
           }
-          /* 메타: 플랜 · 브랜드 · 모델 */
-          const modelPart = sel.model ? ' · ' + sel.model : '';
-          selMeta.textContent = sel.plan + ' · ' + (sel.appBrand || sel.brand) + modelPart;
-          /* 제품명 */
-          selName.textContent = sel.appliance;
+          /* 메타: 브랜드 · 카테고리 */
+          if (selBrand) selBrand.textContent = sel.appBrand || sel.brand;
+          if (selCategory) selCategory.textContent = sel.category;
+          /* 제품명 (모델명) */
+          if (selModel) selModel.textContent = sel.model;
+          /* 플랜 정보 */
+          if (selPlan) selPlan.textContent = PLAN_DATA[sel.plan]?.title || '';
+          if (selMonthly) selMonthly.textContent = PLAN_DATA[sel.plan]?.monthly.replace('원', '') || '';
+
           selBar.classList.add('is-open');
           selBar.setAttribute('aria-hidden', 'false');
         } else {
@@ -823,18 +832,29 @@
       function updatePlanCard(value) {
         const d = PLAN_DATA[value];
         if (!d) return;
-        document.getElementById('planCardTotal').textContent   = d.total;
-        const bestEl = document.getElementById('planCardBest');
-        if (bestEl) bestEl.style.display = d.best ? 'inline-flex' : 'none';
-        
-        const content1 = d.payment + ' | 월 정액 ' + d.monthly + ' | 서비스 전환 ' + d.switchCount;
-        const content2 = d.refund;
 
-        /* 새 플로팅 바 내부 상세 정보 업데이트 */
-        const sbd1 = document.getElementById('sbdLine1');
-        const sbd2 = document.getElementById('sbdLine2');
-        if (sbd1) sbd1.textContent = content1;
-        if (sbd2) sbd2.textContent = content2;
+        /* ① 상품 선택 단계의 정보 카드 업데이트 */
+        const titleEl   = document.getElementById('planCardTitle');
+        const monthlyEl = document.getElementById('planCardMonthly');
+        const paymentEl = document.getElementById('planCardPayment');
+        const totalEl   = document.getElementById('planCardTotal');
+        const bestEl    = document.getElementById('planCardBest');
+
+        if (titleEl)   titleEl.textContent   = d.title;
+        if (monthlyEl) monthlyEl.textContent = d.monthly;
+        if (paymentEl) paymentEl.textContent = d.payment;
+        if (totalEl)   totalEl.textContent   = d.total;
+        if (bestEl)    bestEl.style.display  = d.best ? 'inline-flex' : 'none';
+        
+        // The floating bar now uses individual spans, so these are no longer needed here.
+        // const content1 = d.payment + ' | 월 정액 ' + d.monthly + ' | 서비스 전환 ' + d.switchCount;
+        // const content2 = d.refund;
+
+        // /* 새 플로팅 바 내부 상세 정보 업데이트 */
+        // const sbd1 = document.getElementById('sbdLine1');
+        // const sbd2 = document.getElementById('sbdLine2');
+        // if (sbd1) sbd1.textContent = content1;
+        // if (sbd2) sbd2.textContent = content2;
       }
 
       /* ── 배지 렌더 (공통) ─── */
@@ -1012,6 +1032,7 @@
           sel.img       = card.dataset.imgUrl  || '';
           sel.appBrand  = card.dataset.appBrand || '';
           sel.model     = card.dataset.model    || '';
+          sel.category  = card.dataset.cat      || '';
           refreshSubmit();
         });
 
@@ -1101,6 +1122,7 @@
               sel.img       = card.dataset.imgUrl   || '';
               sel.appBrand  = card.dataset.appBrand || '';
               sel.model     = card.dataset.model    || '';
+              sel.category  = card.dataset.cat      || '';
               refreshSubmit();
             });
             pageEl.appendChild(card);
@@ -1190,7 +1212,7 @@
           document.querySelectorAll('.app-card.active').forEach(c => {
             if (c.dataset.cat !== catVal) {
               c.classList.remove('active');
-              sel.appliance = null; sel.img = null; sel.appBrand = null;
+              sel.appliance = null; sel.img = null; sel.appBrand = null; sel.model = null; sel.category = null;
             }
           });
         }
@@ -1273,27 +1295,72 @@
         await loadAppliances();
       }
 
-      /* ── sel-bar CTA 클릭 → 상담 신청 ─── */
+      const GAS_URL = 'https://script.google.com/macros/s/AKfycbwESnLWVMxBEBrXe3HD1baK38PzLnBu1oPxww1HrV7B-71qhfIkcOGhQgsn4wqgKP1B/exec';
+
+      /* ── sel-bar CTA 클릭 → 상담 신청 (구글 스크립트 연동) ─── */
       if (selCta) {
         selCta.addEventListener('click', async () => {
           if (!sel.plan || !sel.brand || !sel.appliance) return;
+
+          /* 간단 유효성 검사 */
+          const nameVal = document.getElementById('selName').value.trim();
+          const phoneVal = document.getElementById('selPhone').value.trim();
+          if (!nameVal || !phoneVal) {
+            alert('이름과 연락처를 입력해주세요.');
+            return;
+          }
+
           selCta.disabled = true;
           selCta.textContent = '신청 중...';
-          const { error } = await db.from('consultations').insert({
-            plan:      sel.plan,
-            brand:     sel.brand,
-            appliance: sel.appliance,
-            name:      '',
-            phone:     '',
-          });
-          if (error) {
-            console.error('[wizard] consult insert:', error);
+
+          try {
+            /* 구글 앱스 스크립트로 전송 */
+            await fetch(GAS_URL, {
+              method: 'POST',
+              mode: 'no-cors',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                name:      nameVal,
+                phone:     "'" + phoneVal, // 작은 따옴표 추가로 0 보존
+                plan:      PLAN_DATA[sel.plan]?.title || '미선택(상담 후 결정)',
+                brand:     sel.appBrand || sel.brand, 
+                appliance: (sel.appBrand || sel.brand || '') + ' ' + (sel.appliance || '') + (sel.model ? ' (' + sel.model + ')' : ''),
+                source:    '별도 CTA1 제품 선택'
+              })
+            });
+
+            /* 신청 성공 UI 처리: 헤더와 폼 숨기고 메시지 노출 */
+            const header = document.querySelector('.sel-bar__header');
+            const form   = document.getElementById('selBarForm');
+            if (header) header.style.display = 'none';
+            if (form)   form.style.display   = 'none';
+
+            selCancel.style.display = 'none';
+            selCta.style.display    = 'none';
+            const doneMsg = document.getElementById('formDone');
+            if (doneMsg) doneMsg.hidden = false;
+
+            /* 2.5초간 메시지 유지 후 바 닫기 */
+            setTimeout(() => {
+              selBar.classList.remove('is-open');
+              setTimeout(() => {
+                /* 초기화 (다시 열 때를 위해) */
+                if (header) header.style.display = '';
+                if (form)   form.style.display   = '';
+                selCancel.style.display = '';
+                selCta.style.display    = '';
+                if (doneMsg) doneMsg.hidden = true;
+                selCta.disabled = false;
+                selCta.textContent = '선택한 상품으로 신청하기';
+                document.getElementById('selName').value = '';
+                document.getElementById('selPhone').value = '';
+              }, 400); // 바가 완전히 내려간 뒤 초기화
+            }, 2500);
+          } catch (e) {
+            console.error('[wizard] GAS error:', e);
             alert('오류가 발생했습니다. 다시 시도해주세요.');
             selCta.disabled = false;
-            selCta.textContent = '아직 상담 신청을 안하셨나요?';
-          } else {
-            selBar.classList.remove('is-open');
-            document.getElementById('formDone').hidden = false;
+            selCta.textContent = '선택한 상품으로 신청하기';
           }
         });
       }
@@ -1301,9 +1368,11 @@
       /* ── sel-bar 취소 ─── */
       if (selCancel) {
         selCancel.addEventListener('click', () => {
-          sel.appliance = null; sel.img = null; sel.appBrand = null;
+          sel.appliance = null; sel.img = null; sel.appBrand = null; sel.model = null; sel.category = null;
           document.querySelectorAll('.app-card').forEach(c => c.classList.remove('active'));
           refreshSubmit();
+          document.getElementById('selName').value = '';
+          document.getElementById('selPhone').value = '';
         });
       }
 
@@ -1329,31 +1398,44 @@
   </section>
 
   <script>
-    /* ── 고정 상담 신청 폼 제출 ── */
+    /* ── 고정 상담 신청 폼 제출 (구글 스크립트 연동) ── */
     (function () {
       const form = document.getElementById('staticConsultForm');
       const done = document.getElementById('staticFormDone');
+      const GAS_URL = 'https://script.google.com/macros/s/AKfycbwESnLWVMxBEBrXe3HD1baK38PzLnBu1oPxww1HrV7B-71qhfIkcOGhQgsn4wqgKP1B/exec';
       if (!form) return;
+
       form.addEventListener('submit', async function (e) {
         e.preventDefault();
         const cta = form.querySelector('.static-form__cta');
         cta.disabled = true;
         cta.textContent = '신청 중...';
-        const SUPA_URL = 'https://rbliwhiibewihqlpmihd.supabase.co';
-        const SUPA_KEY = 'sb_publishable_n0rEJFTn6Qu12Ui_qDO8bw_sSVJbTR-';
-        const db = supabase.createClient(SUPA_URL, SUPA_KEY);
-        const { error } = await db.from('consultations').insert({
-          name:  document.getElementById('sf_name').value,
-          phone: document.getElementById('sf_phone').value,
-        });
-        if (error) {
-          console.error('[static form]', error);
+
+        const nameVal = document.getElementById('sf_name').value;
+        const phoneVal = document.getElementById('sf_phone').value;
+
+        try {
+          await fetch(GAS_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name:      nameVal,
+              phone:     "'" + phoneVal, // 0 보존
+              plan:      '미선택(상담 후 결정)',
+              brand:     '미선택',
+              appliance: '미선택(전체 상담)',
+              source:    '별도 CTA2 제품 미선택'
+            })
+          });
+
+          form.hidden = true;
+          done.hidden = false;
+        } catch (err) {
+          console.error('[static form]', err);
           alert('오류가 발생했습니다. 다시 시도해주세요.');
           cta.disabled = false;
           cta.textContent = '상담 신청하기 →';
-        } else {
-          form.hidden = true;
-          done.hidden = false;
         }
       });
     })();

@@ -1794,6 +1794,7 @@ main { padding-top: 120px; }
 .form-submit:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
 
 .form-done { font-size: 1.1rem; font-weight: 600; color: #0a0a0a; padding: 1rem 0; }
+.sel-bar .form-done { color: #A4E43F; width: 100%; text-align: center; padding: 0.5rem 0; margin: 0; font-size: 0.95rem; }
 
 @media (max-width: 768px) {
   .wizard-step  { padding: 2rem var(--page-x); }
@@ -2797,6 +2798,15 @@ html { scroll-behavior: smooth; }
   .sel-bar__detail-line { font-size: 0.65rem; }
   .sel-bar__cta { font-size: 0.85rem; padding: 0.6rem 0.8rem; }
 }
+
+.sel-bar__form { display: flex; gap: 0.6rem; padding: 0.2rem 0; margin-bottom: 0.3rem; }
+.sel-bar__input {
+  flex: 1; min-width: 0; background: #1a1a1a; border: 1.5px solid #2a2a2a;
+  border-radius: 8px; color: #fff; padding: 0.7rem 0.9rem; font-size: 0.85rem;
+  font-family: inherit; outline: none; transition: border-color 0.15s;
+}
+.sel-bar__input:focus { border-color: #A4E43F; }
+.sel-bar__input::placeholder { color: #555; }
 
 /* ─── 푸터 위 고정 상담 신청 섹션 ──────────────────────────────── */
 .static-form-section {
