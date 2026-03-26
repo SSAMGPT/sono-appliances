@@ -4,6 +4,7 @@
 html {
   /* 윈도우 스크롤바 레이아웃 쏠림 방지 (데스크탑만) */
   scrollbar-gutter: stable;
+  scroll-behavior: smooth;
 }
 
 @media (max-width: 768px) {
@@ -1375,7 +1376,7 @@ main { padding-top: 120px; }
 .plan-sticky-wrap.is-fixed.brand-attached {
   border-bottom: none;
   box-shadow: none;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.1rem;
 }
 
 /* ─── 브랜드 탭바 sticky 래퍼 ─────────────────────────────────────── */
@@ -1399,14 +1400,14 @@ main { padding-top: 120px; }
 
 /* 플랜이 바로 위에 있을 때 상단 여백 없이 밀착 */
 .brand-sticky-wrap.is-fixed.plan-attached {
-  padding-top: 0.5rem;
+  padding-top: 0.1rem;
 }
 
 /* 가전종류 탭이 바로 아래 붙을 때 → 구분선/그림자 제거 */
 .brand-sticky-wrap.is-fixed.brand-attached {
   border-bottom: none;
   box-shadow: none;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.1rem;
 }
 
 .brand-sticky-placeholder { display: none; }
@@ -1430,7 +1431,7 @@ main { padding-top: 120px; }
   border-right: 1.5px solid #e0e0e0 !important;
   background: transparent;
   color: #0a0a0a;
-  padding: 1rem 0.3rem !important;
+  padding: 0.7rem 0.3rem !important;
   text-align: center;
   font-size: clamp(0.82rem, 1.1vw, 1.02rem) !important;
   font-weight: 700;
@@ -1444,7 +1445,8 @@ main { padding-top: 120px; }
 #brandBadges .sel-badge:focus { outline: none; }
 
 @media (max-width: 767px) {
-  #brandBadges .sel-badge { padding: 0.85rem 0.2rem !important; font-size: clamp(0.72rem, 2.8vw, 0.88rem) !important; }
+  #brandBadges .sel-badge { padding: 0.6rem 0.2rem !important; font-size: clamp(0.72rem, 2.8vw, 0.88rem) !important; }
+  #catBadges .sel-badge { padding: 0.6rem 0.2rem !important; font-size: clamp(0.72rem, 2.8vw, 0.88rem) !important; }
 }
 
 /* placeholder */
@@ -1516,7 +1518,7 @@ main { padding-top: 120px; }
   border-right: 1.5px solid #e0e0e0 !important;
   background: transparent;
   color: #0a0a0a;
-  padding: 1rem 0.5rem;
+  padding: 0.7rem 0.5rem;
   text-align: center;
   font-size: clamp(0.88rem, 1.2vw, 1.05rem);
   font-weight: 700;
@@ -1572,7 +1574,7 @@ main { padding-top: 120px; }
 }
 
 @media (max-width: 767px) {
-  #planBadges .sel-badge { padding: 0.85rem 0.2rem; font-size: clamp(0.78rem, 3.2vw, 0.95rem); }
+  #planBadges .sel-badge { padding: 0.6rem 0.2rem; font-size: clamp(0.78rem, 3.2vw, 0.95rem); }
 }
 
 
@@ -1756,7 +1758,12 @@ main { padding-top: 120px; }
 }
 
 
-.loading-text { font-size: 1rem; color: #888; padding: 2rem 0; }
+.loading-text { 
+  font-size: 1rem; color: #888; padding: 2rem 0;
+  width: 100%;
+  flex: 0 0 100%;
+  text-align: center;
+}
 
 .sel-summary {
   font-size: 1rem; color: #888;
@@ -1822,6 +1829,10 @@ main { padding-top: 120px; }
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
+.cat-sticky-wrap.is-fixed.plan-attached {
+  padding-top: 0.1rem;
+}
+
 .cat-sticky-wrap.is-fixed.brand-attached {
   border-bottom: none;
   box-shadow: none;
@@ -1849,7 +1860,7 @@ main { padding-top: 120px; }
   border-right: 1.5px solid #e0e0e0 !important;
   background: transparent;
   color: #0a0a0a;
-  padding: 1rem 0.2rem !important;
+  padding: 0.7rem 0.2rem !important;
   text-align: center;
   font-size: clamp(0.72rem, 1vw, 0.95rem) !important;
   font-weight: 700;
@@ -1920,6 +1931,7 @@ main { padding-top: 120px; }
 #appSlider {
   display: block;
   overflow: hidden;
+  min-height: 500px;
 }
 
 .app-slider__track {
@@ -2839,15 +2851,17 @@ html { scroll-behavior: smooth; }
 }
 .static-form__fields {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
 }
 .static-form__input {
   flex: 1;
-  padding: 0.85rem 1rem;
+  min-width: 0; /* 브라우저 기본 최소 너비 무시 */
+  padding: 0.9rem 1.1rem;
   border: 1.5px solid #2a2a2a;
   border-radius: 12px;
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: #fff;
   background: #1a1a1a;
   outline: none;
@@ -2985,4 +2999,14 @@ html { scroll-behavior: smooth; }
   }
   .modal-header { padding: 20px 24px 14px; }
   .modal-body   { padding: 24px; font-size: 0.9rem; }
+}
+/* ── 상담 신청 섹션 모바일 대응 ── */
+@media (max-width: 480px) {
+  .static-form__fields {
+    flex-direction: column;
+  }
+  .static-form__input {
+    width: 100%;
+    flex: none;
+  }
 }

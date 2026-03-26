@@ -39,11 +39,11 @@
   </style>
 </head>
 
-<body>
+<body id="top">
 
   <!-- ── 헤더 ──────────────────────────────────────────────────── -->
   <header class="site-header">
-    <a class="logo" href="/" aria-label="소노 스마트케어 홈">소노 스마트케어</a>
+    <a class="logo" href="#top" aria-label="소노 스마트케어 상단으로 이동">소노 스마트케어</a>
     <div class="header-actions">
       <button class="icon-btn menu-btn" aria-label="메뉴 열기">
         <svg width="22" height="16" viewBox="0 0 22 16" fill="none">
@@ -451,7 +451,7 @@
           <div class="sel-bar__footer">
             <button class="sel-bar__cancel" id="selBarCancel" type="button">취소</button>
             <button class="sel-bar__cta" id="selBarCta" type="button">
-              선택한 상품으로 신청하기
+              아직 상담 신청을 하지 않으셨나요? >>
             </button>
             <p class="form-done" id="formDone" hidden>✓ 상담 신청이 완료됐습니다. 곧 연락드리겠습니다.</p>
           </div>
@@ -777,6 +777,8 @@
       const sel = { plan: null, brand: null, appliance: null, img: null, appBrand: null, model: null, category: null };
       window.__wizSel = sel;
 
+      let isInit = true; // 초기 실행 플래그
+
       /* 필터 상태 (sel과 분리: 화면 표시 필터용) */
       let fPlan = null, fBrand = '전체', fCat = '전체';
 
@@ -1082,7 +1084,6 @@
           s1.start();
           s2.start();
         });
-        renderSlider(products);  /* 모바일 슬라이더 동시 갱신 */
       }
 
       /* ── 모바일 슬라이더 (3행×2열 페이지, 10초 자동 RTL, 마지막서 멈춤) ─── */
@@ -1146,11 +1147,12 @@
           });
         }
 
-        function goPage(pg) {
+        function goPage(pg, instant) {
           curPage = ((pg % pages) + pages) % pages;  /* 무한 루프 */
+          track.style.transition = instant ? 'none' : 'transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)';
           track.style.transform = 'translateX(-' + (curPage * 100) + '%)';
           dots.forEach((d, i) => d.classList.toggle('active', i === curPage));
-          dotsTop.forEach((d, i) => d.classList.toggle('active', i === curPage));
+          if (dotsTop.length) dotsTop.forEach((d, i) => d.classList.toggle('active', i === curPage));
         }
 
         /* 10초 자동: 마지막 페이지 → 첫 페이지로 무한 반복 */
@@ -1159,6 +1161,9 @@
           if (pages <= 1) return;
           sliderTimer = setInterval(() => goPage(curPage + 1), 10000);
         }
+        
+        // [수정] 렌더링 즉시 첫 페이지(0)로 리셋하여 필터 결과가 바로 보이도록 함
+        goPage(0, true);
         scheduleAuto();
 
         /* 터치 드래그 */
@@ -1203,6 +1208,20 @@
         }
         renderTwoRows(filtered);
         renderSlider(filtered);
+
+        // [추가] 탭 클릭 시 제품 목록 최상단으로 스크롤
+        if (!isInit) {
+          const target = document.getElementById('appSlider');
+          if (target) {
+            const h = document.querySelector('.site-header')?.offsetHeight || 60;
+            const p = document.querySelector('.plan-sticky-wrap')?.offsetHeight || 0;
+            const b = document.querySelector('.brand-sticky-wrap')?.offsetHeight || 0;
+            const c = document.querySelector('.cat-sticky-wrap')?.offsetHeight || 0;
+            const offset = h + p + b + c;
+            const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({ top: top - 20, behavior: 'smooth' }); // 20px 여유
+          }
+        }
       }
 
       function filterByCategory(catVal) {
@@ -1270,7 +1289,7 @@
           return;
         }
         allProducts = data;
-        renderTwoRows(allProducts);
+        applyFilters(); 
       }
 
       /* ── 전체 초기화: options 3종 + products 로드 ─── */
@@ -1293,6 +1312,8 @@
         renderBrandBadges(brandRes.data || []);                           // '전체' 포함, 기본 선택
         renderCatBadges(catRes.data || []);
         await loadAppliances();
+
+        isInit = false; // 초기 로드 완료
       }
 
       const GAS_URL = 'https://script.google.com/macros/s/AKfycbwESnLWVMxBEBrXe3HD1baK38PzLnBu1oPxww1HrV7B-71qhfIkcOGhQgsn4wqgKP1B/exec';
@@ -1350,7 +1371,7 @@
                 selCta.style.display    = '';
                 if (doneMsg) doneMsg.hidden = true;
                 selCta.disabled = false;
-                selCta.textContent = '선택한 상품으로 신청하기';
+                selCta.textContent = '아직 상담 신청을 하지 않으셨나요? >>';
                 document.getElementById('selName').value = '';
                 document.getElementById('selPhone').value = '';
               }, 400); // 바가 완전히 내려간 뒤 초기화
@@ -1359,7 +1380,7 @@
             console.error('[wizard] GAS error:', e);
             alert('오류가 발생했습니다. 다시 시도해주세요.');
             selCta.disabled = false;
-            selCta.textContent = '선택한 상품으로 신청하기';
+            selCta.textContent = '아직 상담 신청을 하지 않으셨나요? >>';
           }
         });
       }
