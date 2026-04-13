@@ -1,0 +1,81 @@
+        <!-- ① 상품 선택 -->
+        <div class="wizard-step" id="wizardStepProduct">
+          <!-- 플랜 탭바 (sticky 처리) -->
+          <div class="plan-sticky-wrap">
+            <div id="planBadges"></div>
+          </div>
+          
+          <div class="plan-slider-wrap" style="position: relative; margin-bottom: 2rem;">
+            <style>
+              .plan-slider-viewport { position: relative; overflow: hidden; width: 100%; border-radius: 20px; }
+              .plan-slider-nav { 
+                position:absolute; top:50%; width:44px; height:44px; border-radius:50%; background:#fff; 
+                border:1px solid #e0e0e0; box-shadow:0 2px 8px rgba(0,0,0,0.12); display:flex; 
+                align-items:center; justify-content:center; cursor:pointer; color:#0a0a0a; z-index:10; transition:all 0.2s; 
+              }
+              .plan-slider-nav:hover { background:#0a0a0a; color:#fff; }
+              .plan-slider-nav--prev { left: 10px; transform: translateY(-50%); }
+              .plan-slider-nav--next { right: 10px; transform: translateY(-50%); }
+              .plan-slider-track { display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform; }
+            </style>
+            <div class="plan-slider-viewport">
+              <div class="plan-slider-track" id="planSliderTrack"></div>
+            </div>
+            <button class="plan-slider-nav plan-slider-nav--prev" id="planSliderPrev" aria-label="이전 플랜">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button class="plan-slider-nav plan-slider-nav--next" id="planSliderNext" aria-label="다음 플랜">
+               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+
+          <div class="guide-btn-wrap">
+            <div class="guide-btn">
+              <span class="guide-btn-text">가전을 선택하시면 상품을 안내해 드립니다</span>
+              <span class="guide-btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 24 24"><path fill="currentColor" d="M11 5v11.17l-4.88-4.88c-.39-.39-1.03-.39-1.42 0s-.39 1.02 0 1.41l6.59 6.59c.39.39 1.02.39 1.41 0l6.59-6.59c.39-.39.39-1.02 0-1.41s-1.02-.39-1.41 0L13 16.17V5c0-.55-.45-1-1-1s-1 .45-1 1"></path></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ② 브랜드 선택 (주석 유지) -->
+
+        <!-- ③ 가전 종류 -->
+        <div class="wizard-step">
+          <div class="wstep-head">
+            <div class="wstep-num wstep-num--icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108.89 108.89" aria-hidden="true" style="width: 100%; height: 100%;">
+                <path fill="#a0ec06" d="M54.45,40.65l-10.48-11.5V10.48c0-5.79,4.69-10.48,10.48-10.48h0c5.79,0,10.48,4.69,10.48,10.48v18.67z"/>
+                <path fill="#a0ec06" d="M40.65,54.45l-11.5,10.48H10.48c-5.79,0-10.48-4.69-10.48-10.48h18.67z"/>
+                <path fill="#a0ec06" d="M54.45,68.24l10.48,11.5v18.67c0,5.79-4.69,10.48-10.48,10.48v-18.67z"/>
+                <path fill="#a0ec06" d="M68.24,54.45l11.5-10.48h18.67c5.79,0,10.48,4.69,10.48,10.48h-18.67z"/>
+              </svg>
+            </div>
+            <h3 class="wstep-title">가전 종류</h3>
+          </div>
+          
+          <div class="cat-sticky-wrap">
+            <div id="catBadges"></div>
+          </div>
+          
+          <!-- 데스크탑 가전 내비게이션 -->
+          <div class="app-dual-rows" id="appDualRows">
+            <button type="button" class="app-nav-btn app-nav-btn--prev" id="appPrev">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+            </button>
+            <button type="button" class="app-nav-btn app-nav-btn--next" id="appNext">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </button>
+            <div class="app-row-outer" id="appRowCombined">
+              <div class="app-track--dual" id="appTrackCombined"></div>
+            </div>
+          </div>
+
+          <!-- 모바일 전용 슬라이더 -->
+          <div id="appSlider" class="app-slider">
+            <div class="app-slider__dots app-slider__dots--top" id="appSliderDotsTop"></div>
+            <div class="app-slider__track" id="appSliderTrack"></div>
+            <div class="app-slider__dots" id="appSliderDots"></div>
+          </div>
+        </div>
