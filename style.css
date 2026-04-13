@@ -791,6 +791,28 @@ main { padding-top: 120px; }
   color: #fff;
   letter-spacing: -0.01em;
 }
+.sel-badge {
+  padding: 0.8rem 1.2rem;
+  border: 1.5px solid #000; /* 가이드 버튼과 동일한 테두리 */
+  border-radius: 14px;      /* 가이드 버튼과 동일한 둥글기 */
+  background: #fff;
+  color: #000;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.sel-badge.active {
+  background: #000;
+  color: #fff;
+}
+.sel-badge:hover {
+  background: #f0f0f0;
+}
+.sel-badge.active:hover {
+  background: #333;
+}
 
 .hero-step-sep {
   color: rgba(255,255,255,0.35);
@@ -2023,6 +2045,10 @@ main { padding-top: 120px; }
   display: flex;
   align-items: center;
   justify-content: center;
+}
+#catBadges .sel-badge.active {
+  background: #0a0a0a !important;
+  color: #fff !important;
 }
 
 /* 첫 번째(전체) 버튼 — 2행 전체 차지 */
